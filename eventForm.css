@@ -1,0 +1,70 @@
+#eventPopupContainer {
+  background-color: rgba(0, 0, 0, 0.1);
+  place-items: center;
+  z-index: 10;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
+
+#eventPopupContainer.hidden {
+  display: none;
+}
+
+#eventPopupContainer.visible {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#eventForm {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  min-height: auto;
+  width: 70%;
+  max-width: 600px;
+}
+
+#eventForm h2 {
+  margin: 0;
+  text-align: center;
+}
+
+#eventForm > * {
+  margin-bottom: 5px;
+}
+
+#eventForm textarea {
+  resize: vertical;
+}
+
+#eventForm > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: none;
+  justify-content: center;
+  width: 100%;
+}
+
+#eventFormButtonsContainer {
+  margin-top: auto;
+}
+
+@media (min-width: 768px) {
+  #eventForm > div {
+    flex-direction: row;
+  }
+
+  #eventForm #eventFormButtonsContainer * {
+    width: 100%;
+  }
+
+  #eventForm #timeContainer {
+    justify-content: flex-start;
+  }
+}

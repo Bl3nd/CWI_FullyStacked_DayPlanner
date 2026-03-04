@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Day Planner</title>
     <link rel="stylesheet" href="baseStyling.css" />
+    <link rel="stylesheet" href="eventForm.css" />
     <script src="./modules/main.js" type="module"></script>
   </head>
   <body>
@@ -45,6 +46,51 @@
         <button>Do Stuff</button>
       </div>
       <button id="addEventButton">Add Event</button>
+    </div>
+    <div id="eventPopupContainer" class="hidden">
+      <!-- Event Form -->
+      <form id="eventForm">
+        <h2 id="eventFormTitle">Add Event</h2>
+        <label for="eventTitle">Event Name <span>*</span></label>
+        <input type="text" id="eventTitle" name="title" required />
+        <label for="eventDate">Date <span>*</span></label>
+        <input type="date" id="eventDate" name="date" required/>
+        <div id="timeContainer">
+          <label for="eventStartTime">Start Time <span>*</span></label>
+          <input type="time" id="eventStartTime" name="timeStart" step="900" required/>
+          <label for="eventEndTime">End Time <span>*</span></label>
+          <input type="time" id="eventEndTime" name="timeEnd" step="900" required/>
+          <label for="eventColor">Color</label>
+          <input type="color" id="eventColor" name="color" value="#ffffff" list="colorOptions"/>
+          <datalist id="colorOptions">
+            <option value="#ffffff">White</option>
+            <option value="#ff0000">Red</option>
+            <option value="#00ff00">Green</option>
+            <option value="#0000ff">Blue</option>
+            <option value="#ffff00">Yellow</option>
+            <option value="#ff00ff">Magenta</option>
+            <option value="#00ffff">Cyan</option>
+        </div>
+        <label for="eventAddress">Address</label>
+        <input
+          type="text"
+          id="eventAddress"
+          name="address"
+          autocomplete="street-address"
+        />
+        <label for="eventDescription">Description</label>
+        <textarea
+          id="eventDescription"
+          name="description"
+          rows="4"
+          cols="50"
+        ></textarea>
+        <div id="eventFormButtonsContainer">
+          <button type="submit">Submit</button>
+          <button type="button" id="cancelEventButton">Cancel</button>
+        </div>
+      </form>
+      <!--  -->
     </div>
   </body>
 </html>
