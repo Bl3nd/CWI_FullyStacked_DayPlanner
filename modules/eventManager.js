@@ -1,6 +1,7 @@
 import generateUID from "./UIDGenerator.js";
 import StorageManager from "./dataStorage.js";
 import CalendarEvent from "./classCalendarEvent.js";
+import { renderCalendarView } from "./calendar/calendar.js";
 
 const eventPopupContainer = document.getElementById("eventPopupContainer");
 const eventTitleInput = document.getElementById("eventTitle");
@@ -25,6 +26,8 @@ function initializeEventManager() {
   const addEventButton = document.getElementById("addEventButton");
   const cancelEventButton = document.getElementById("cancelEventButton");
   const eventForm = document.getElementById("eventForm");
+  const calendarEventsLayer = document.getElementById("calendarEventsLayer");
+  const deleteEventButton = document.getElementById("deleteEventButton");
 
   addEventButton.addEventListener("click", () => {
     prepareAddEventMode();
@@ -41,8 +44,7 @@ function initializeEventManager() {
     // console.log(addEventButton, cancelEventButton, eventForm);
   });
 
-  //additional listener for 'edit event' option.  Reads clicks on event targets and stores eventUID then runs openEventEditor() based on eventUID/
-  const calendarEventsLayer = document.getElementById("calendarEventsLayer");
+  //additional listener for 'edit event' option.  Reads clicks on event targets and stores eventUID then runs openEventEditor() based on eventUID.
 
   calendarEventsLayer.addEventListener("click", (event) => {
     const clickedEventButton = event.target.closest("[data-event-id]");
@@ -53,6 +55,17 @@ function initializeEventManager() {
 
     const eventUID = clickedEventButton.dataset.eventId;
     openEventEditor(eventUID);
+  });
+
+  //additional listener for 'delete event' button option.  reads click on id="deleteEventButton" and runs the deletion function.
+  deleteEventButton.addEventListener("click", () => {
+    //failure guardrail
+    if (!editingEventUID) {
+      return;
+    }
+    StorageManager.deleteEvent(editingEventUID);
+    hideEventCreator();
+    calenderEventRefresh();
   });
 }
 
@@ -77,6 +90,7 @@ function submitEvent(eventForm) {
   const newEvent = new CalendarEvent(eventProps);
   StorageManager.saveEvent(newEvent);
   hideEventCreator();
+  calenderEventRefresh();
   console.log("Event saved (UID: " + id + ")");
   console.log(newEvent);
 }
@@ -206,6 +220,17 @@ function openEventEditor(eventUID) {
   eventDescriptionInput.value = eventToEdit.description ?? "";
 
   showEventCreator();
+}
+
+/**
+ * re-render function after adding, editing, or deleting an event
+ */
+function calenderEventRefresh() {
+  const headerDateContainer = document.getElementById("headerDateContainer");
+  const headerDateText = headerDateContainer.textContent;
+  const headerDateRender = new Date(headerDateText);
+  const allEvents = StorageManager.loadAllEvents();
+  renderCalendarView(allEvents, headerDateRender, "day");
 }
 
 export { initializeEventManager, openEventEditor };
