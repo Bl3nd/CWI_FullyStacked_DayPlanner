@@ -1,7 +1,7 @@
 // Remember to change the restoreDefaults() method and testSuite() if you change any of these default values
 
 let lightMode = "light";
-const lightModeOptions = ["light", "dark", "auto"];
+const lightModeOptions = ["light", "dark"];
 
 let tempUnit = "Fahrenheit";
 const tempUnitOptions = ["Celsius", "Fahrenheit"];
@@ -30,6 +30,9 @@ const diplayHolidaysOptions = [true, false];
  * The restoreDefaults() method resets all settings to their default values.
  */
 const appSettings = {
+  //
+  // Light mode
+  //
   get lightMode() {
     return lightMode;
   },
@@ -40,6 +43,16 @@ const appSettings = {
       logInvalidValue(value, "lightMode", lightModeOptions);
     }
   },
+  toggleLightMode() {
+    if (lightMode === "light") {
+      lightMode = "dark";
+    } else {
+      lightMode = "light";
+    }
+  },
+  //
+  // Temperature unit
+  //
   get tempUnit() {
     return tempUnit;
   },
@@ -50,6 +63,16 @@ const appSettings = {
       logInvalidValue(value, "tempUnit", tempUnitOptions);
     }
   },
+  toggleTempUnit() {
+    if (tempUnit === "Fahrenheit") {
+      tempUnit = "Celsius";
+    } else {
+      tempUnit = "Fahrenheit";
+    }
+  },
+  //
+  // Color theme
+  //
   get colorTheme() {
     return colorTheme;
   },
@@ -60,6 +83,9 @@ const appSettings = {
       logInvalidValue(value, "colorTheme", colorThemeOptions);
     }
   },
+  //
+  // First day of week
+  //
   get firstDayOfWeek() {
     return firstDayOfWeek;
   },
@@ -70,6 +96,16 @@ const appSettings = {
       logInvalidValue(value, "firstDayOfWeek", firstDayOfWeekOptions);
     }
   },
+  toggleFirstDayOfWeek() {
+    if (firstDayOfWeek === "Sunday") {
+      firstDayOfWeek = "Monday";
+    } else {
+      firstDayOfWeek = "Sunday";
+    }
+  },
+  //
+  // Display holidays
+  //
   get displayHolidays() {
     return displayHolidays;
   },
@@ -78,6 +114,13 @@ const appSettings = {
       displayHolidays = value;
     } else {
       logInvalidValue(value, "displayHolidays", diplayHolidaysOptions);
+    }
+  },
+  toggleDisplayHolidays() {
+    if (displayHolidays === true) {
+      displayHolidays = false;
+    } else {
+      displayHolidays = true;
     }
   },
 
