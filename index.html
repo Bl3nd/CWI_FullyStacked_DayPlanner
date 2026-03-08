@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="baseStyling.css" />
     <link rel="stylesheet" href="eventForm.css" />
     <script src="./modules/main.js" type="module"></script>
-    <!-- <script src="./modules/weatherDisplay.js" type="module" defer></script> -->
   </head>
   <body>
     <!--  -->
@@ -19,10 +18,9 @@
       <div id="headerInfoContainer">
         <div id="headerDateContainer">Tuesday, Feb 10</div>
         <div id="headerWeatherContainer">
-          <span class="weatherChild"><strong>Boise</strong></span>
-          <img id="weather-icon" class="weatherChild"/>
-          <span id="temperature" class="weatherChild"></span>
-          <span id="weather-description" class="weatherChild"></span>
+          <div id="weatherDisplay">
+            <p>Weather loading...</p>
+          </div>
         </div>
       </div>
       <!-- Holds the buttons that swap calendar view between Day, Week, Month -->

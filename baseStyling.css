@@ -38,17 +38,19 @@ div {
   width: 100%;
 }
 
-#headerWeatherContainer {
-  display: inline-flex;
-  padding: 0.2rem;
+#headerWeatherContainer #weatherDisplay {
+  border: none;
+  padding: 0 0.1rem;
 }
 
-#headerWeatherContainer .weatherChild {
-  padding: 0 2px 0 2px;
+#headerWeatherContainer #weatherDisplay p {
+  display: inline-block;
+  margin-right: 0.1rem;
 }
 
 #headerWeatherContainer img {
-  width: 1.8rem;
+  width: 2rem;
+  vertical-align: middle;
 }
 
 #displayButtonsContainer {
