@@ -1,12 +1,12 @@
 "use strict";
 
-import { formatSlotTime, MINUTES_PER_DAY, PIXELS_PER_MINUTE, DAY_TOTAL_HEIGHT, isToday, calculateTheCurrentMinutesFromMidnight, timeStringToMinutes, formatTime } from "./calendar.js";
+import * as Calendar from "./calendar.js";
 
 // Render the single day view of the calendar
 export function renderSingleDay(events, viewDate) {
     const slotDuration = getSlotDuration();
-    const currentMinutesFromMidnight = isToday(viewDate) ? calculateTheCurrentMinutesFromMidnight() : null;
-    const slotHeight = slotDuration * PIXELS_PER_MINUTE;
+    const currentMinutesFromMidnight = Calendar.isToday(viewDate) ? Calendar.calculateTheCurrentMinutesFromMidnight() : null;
+    const slotHeight = slotDuration * Calendar.PIXELS_PER_MINUTE;
     const slots = createAllSlotsForDay(slotDuration);
     const dayContentWrapper = document.getElementById('calendarDayContentWrapper');
     if (!dayContentWrapper) return;
@@ -17,7 +17,7 @@ export function renderSingleDay(events, viewDate) {
     const calendarViewArea = document.getElementById('calendarViewArea');
     if (!calendarViewArea) return;
     const activeRow = calendarViewArea.querySelector('.calendarTimeSlotRow[data-active="true"]');
-    if (activeRow && isToday(viewDate)) {
+    if (activeRow && Calendar.isToday(viewDate)) {
         activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
@@ -45,11 +45,13 @@ function createTimeSlotColumn(slots, currentMinutesFromMidnight, slotDuration, s
         const timeLabel = document.createElement('span');
         timeLabel.id = 'calendarTimeLabel';
         timeLabel.className = 'calendarTimeLabel';
-        timeLabel.textContent = `${formatSlotTime(slotStart)}`;
+        timeLabel.textContent = `${Calendar.formatSlotTime(slotStart)}`;
         timeSlotRow.appendChild(timeLabel);
 
         slotLabelsColumn.appendChild(timeSlotRow);
     });
+
+    return slotLabelsColumn;
 }
 
 // Creates the day grid column for the calendar (the right column with the hour grid lines and the events)
@@ -65,7 +67,7 @@ function createHourGridLines(slots, slotHeight) {
     if (!hourGridLines) return;
     // Reset and size the container for the full day height
     hourGridLines.innerHTML = '';
-    hourGridLines.style.height = `${DAY_TOTAL_HEIGHT}px`;
+    hourGridLines.style.height = `${Calendar.DAY_TOTAL_HEIGHT}px`;
     slots.forEach(() => {
         const line = document.createElement('div');
         line.className = 'calendarHourGridLine';
@@ -83,7 +85,7 @@ function createCurrentTimeLine(currentMinutesFromMidnight) {
         currentTimeLine.style.visibility = 'hidden';
     } else {
         currentTimeLine.style.visibility = 'visible';
-        currentTimeLine.style.top = `${currentMinutesFromMidnight * PIXELS_PER_MINUTE}px`;
+        currentTimeLine.style.top = `${currentMinutesFromMidnight * Calendar.PIXELS_PER_MINUTE}px`;
     }
 }
 
@@ -94,7 +96,7 @@ function createEventsLayer(events) {
 
     // Clear previous events before re-rendering
     eventsLayer.innerHTML = '';
-    eventsLayer.style.height = `${DAY_TOTAL_HEIGHT}px`;
+    eventsLayer.style.height = `${Calendar.DAY_TOTAL_HEIGHT}px`;
 
     // We want to assign the lanes before looping through the events so that we can use the assigned lanes in the button creation.
     const assignedLanes = assignLanesForEvents(events);
@@ -108,11 +110,11 @@ function createEventsLayer(events) {
 // Creates an event button for the calendar that displays the basic event information.
 function createEventButton(eventsLayer, events, event, index, assignedLanes) {
     // Button calculations
-    const startTimeMinutes = timeStringToMinutes(event.timeStart);
-    const endTimeMinutes = timeStringToMinutes(event.timeEnd);
+    const startTimeMinutes = Calendar.timeStringToMinutes(event.timeStart);
+    const endTimeMinutes = Calendar.timeStringToMinutes(event.timeEnd);
     const duration = endTimeMinutes - startTimeMinutes;
-    const topPosition = startTimeMinutes * PIXELS_PER_MINUTE;
-    const durationHeight = duration * PIXELS_PER_MINUTE;
+    const topPosition = startTimeMinutes * Calendar.PIXELS_PER_MINUTE;
+    const durationHeight = duration * Calendar.PIXELS_PER_MINUTE;
     const maxHeight = Math.max(18, durationHeight);
     const isShort = durationHeight <= 44;
 
@@ -122,7 +124,7 @@ function createEventButton(eventsLayer, events, event, index, assignedLanes) {
     const width = 100 / totalLanes;
     const leftPosition = width * laneIndex;
 
-    const formattedTimeString = `${formatTime(event.timeStart)} - ${formatTime(event.timeEnd)}`;
+    const formattedTimeString = `${Calendar.formatTime(event.timeStart)} - ${Calendar.formatTime(event.timeEnd)}`;
 
     const eventButton = document.createElement('button');
     eventButton.className = isShort ? 'calendarEventContainer calendarEventContainer--compact' : 'calendarEventContainer';
@@ -157,8 +159,8 @@ function createEventButton(eventsLayer, events, event, index, assignedLanes) {
 function assignLanesForEvents(events) {
     const assignedLanes = new Map();
     // Inline functions to calculate the duration and tranlsate time strings to minutes
-    const durationMinutes = (event) => timeStringToMinutes(event.timeEnd) - timeStringToMinutes(event.timeStart);
-    const startMinutes = (event) => timeStringToMinutes(event.timeStart);
+    const durationMinutes = (event) => Calendar.timeStringToMinutes(event.timeEnd) - Calendar.timeStringToMinutes(event.timeStart);
+    const startMinutes = (event) => Calendar.timeStringToMinutes(event.timeStart);
     // Sort the events by duration and start time
     const sortedEvents = [...events].sort(
         (event1, event2) => durationMinutes(event2) - durationMinutes(event1) || startMinutes(event1) - startMinutes(event2)
@@ -166,14 +168,14 @@ function assignLanesForEvents(events) {
 
     // Loop through the sortedevents and assign a lane to each event
     sortedEvents.forEach((event) => {
-        const eventStart = timeStringToMinutes(event.timeStart);
-        const eventEnd = timeStringToMinutes(event.timeEnd);
+        const eventStart = Calendar.timeStringToMinutes(event.timeStart);
+        const eventEnd = Calendar.timeStringToMinutes(event.timeEnd);
         const usedLanes = new Set();
         // Loop through the other events and add the lane of the other event to the used lanes set if it overlaps with the current event
         events.forEach((otherEvent) => {
             if (otherEvent.UID === event.UID || !assignedLanes.has(otherEvent.UID)) return;
-            const otherStart = timeStringToMinutes(otherEvent.timeStart);
-            const otherEnd = timeStringToMinutes(otherEvent.timeEnd);
+            const otherStart = Calendar.timeStringToMinutes(otherEvent.timeStart);
+            const otherEnd = Calendar.timeStringToMinutes(otherEvent.timeEnd);
             const overlaps = eventStart < otherEnd && eventEnd > otherStart;
             if (overlaps) usedLanes.add(assignedLanes.get(otherEvent.UID));
         });
@@ -193,12 +195,12 @@ function assignLanesForEvents(events) {
 
 // Calculates the total number of concurrent events overlapping the given event's time range.
 function calculateTotalConcurrentEvents(event, events) {
-    const eventStart = timeStringToMinutes(event.timeStart);
-    const eventEnd = timeStringToMinutes(event.timeEnd);
+    const eventStart = Calendar.timeStringToMinutes(event.timeStart);
+    const eventEnd = Calendar.timeStringToMinutes(event.timeEnd);
     // Filter the events to only include events that overlap with the given event's time range
     const concurrentEvents = events.filter((other) => {
-        const otherStart = timeStringToMinutes(other.timeStart);
-        const otherEnd = timeStringToMinutes(other.timeEnd);
+        const otherStart = Calendar.timeStringToMinutes(other.timeStart);
+        const otherEnd = Calendar.timeStringToMinutes(other.timeEnd);
         return eventStart < otherEnd && eventEnd > otherStart;
     });
     // If there are no concurrent events, return 1
@@ -208,8 +210,8 @@ function calculateTotalConcurrentEvents(event, events) {
     const points = [];
     // Loop through the concurrent events and add the start and end points to the points array
     concurrentEvents.forEach((concurrentEvent) => {
-        points.push({ time: timeStringToMinutes(concurrentEvent.timeStart), delta: 1 });
-        points.push({ time: timeStringToMinutes(concurrentEvent.timeEnd), delta: -1 });
+        points.push({ time: Calendar.timeStringToMinutes(concurrentEvent.timeStart), delta: 1 });
+        points.push({ time: Calendar.timeStringToMinutes(concurrentEvent.timeEnd), delta: -1 });
     });
 
     // Sort the points by time
@@ -229,7 +231,7 @@ function calculateTotalConcurrentEvents(event, events) {
 // Creates the full 24 hour slots
 function createAllSlotsForDay(slotDuration) {
     const slots = [];
-    for (let i = 0; i < MINUTES_PER_DAY; i += slotDuration) {
+    for (let i = 0; i < Calendar.MINUTES_PER_DAY; i += slotDuration) {
         slots.push(i);
     }
     return slots;

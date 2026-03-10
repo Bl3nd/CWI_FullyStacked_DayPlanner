@@ -8,7 +8,7 @@ import { renderSingleMonth } from "./monthlyCalendar.js";
    !!! This is the entry point for the calendar module. It is used to render the calendar view based on the calendar view type.
 */
 
-const CalendarView = { // Valid views for the calendar
+export const CalendarView = { // Valid views for the calendar
     DAY: 'day',
     WEEK: 'week',
     MONTH: 'month',
@@ -23,6 +23,8 @@ export const DAY_TOTAL_HEIGHT = MINUTES_PER_DAY * PIXELS_PER_MINUTE; // Give the
 // ----------------------Main Functions----------------------
 // Render the calendar view based on the calendar view type
 export function renderCalendarView(events, viewDate = new Date(), calendarView = CalendarView.DAY) {
+    const calendarViewArea = document.getElementById('calendarViewArea');
+    if (calendarViewArea) calendarViewArea.setAttribute("data-calendar-view", calendarView); // Sets the 'data-calendar-view' attribute so we can show/hide the correct content.
     switch (calendarView) {
         case CalendarView.DAY:
             renderSingleDay(filterEventsForDate(events, viewDate), viewDate);
