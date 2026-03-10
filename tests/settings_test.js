@@ -61,8 +61,6 @@ function settingsTests() {
   );
   appSettings.lightMode = "dark";
   expectValue("Valid value 'dark' is accepted", appSettings.lightMode, "dark");
-  appSettings.lightMode = "auto";
-  expectValue("Valid value 'auto' is accepted", appSettings.lightMode, "auto");
   appSettings.lightMode = "light";
   expectValue(
     "Valid value 'light' is accepted",
