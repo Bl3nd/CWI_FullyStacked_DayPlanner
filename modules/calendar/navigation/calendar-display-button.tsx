@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import { CalendarView } from "../calendar";
-
 type CalendarDisplayButtonProps = {
   calendarView: string; // Make sure the calendar view is a valid view based upon CalendarView enum
   isActive: boolean;

@@ -1,4 +1,3 @@
-import React from "react";
 import CalendarNavButton from "../navigation/calendar-nav-button";
 
 type CalendarNavButtonsGroupProps = {

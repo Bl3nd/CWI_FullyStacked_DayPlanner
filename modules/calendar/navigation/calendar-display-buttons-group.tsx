@@ -1,9 +1,8 @@
-import React from "react";
 import CalendarDisplayButton from "../navigation/calendar-display-button";
 import { CalendarView } from "../calendar";
 
 type CalendarDisplayButtonsGroupProps = {
-  activeView: "day" | "week" | "month";
+  activeView: "day" | "week" | "month" | string;
   onSelectView: (view: string) => void;
 };
 
