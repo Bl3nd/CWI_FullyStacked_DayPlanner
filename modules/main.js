@@ -1,4 +1,4 @@
-// import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../styling/baseStyling.css";
 import "../styling/calendar.css";
 import "../styling/dayCalendar.css";
@@ -21,7 +21,7 @@ import { loadWeatherDisplay } from "./weatherDisplay";
 
 import runTests from "../tests/runTests";
 
-// Load events and user settings from localStorage when the application starts
+// TODO: change this to utilize appState.eventsByUID and appState.eventsByDate instead of loading events from storage.
 const allEvents = StorageManager.loadAllEvents();
 appSettings.loadSettings();
 
