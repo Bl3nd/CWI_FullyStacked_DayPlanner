@@ -53,10 +53,12 @@ function initializeEventManager() {
 /** Handle form submission for creating a new calendar event
  * Extracts data from the form, performs data validation, creates an event object, and assigns it a unique identifier (UID)
  * Uses StorageManager to store the event in localStorage
- * @param {HTMLFormElement} eventForm - The form element containing event details
+ * @param {HTMLFormElement} event - The form element containing event details
 */
 function submitEvent(event) {
-  e.preventDefault();
+  event.preventDefault();
+  // Pull form from the event
+  const eventForm = event.currentTarget;
   // Extract form data and create event object
   const data = new FormData(eventForm);
   const eventProps = Object.fromEntries(data);
@@ -142,8 +144,6 @@ function validateEventSubmission(event) {
  *  Show event creation form
  */
 function showEventCreator() {
-  // eventPopupContainer.classList.remove("hidden");
-  // eventPopupContainer.classList.add("visible");
   eventFormRoot.render(<EventForm UID={null} onCancel={hideEventCreator} onSubmit={submitEvent} />);
 
   // const cancelEventButton = document.getElementById("cancelEventButton");
@@ -154,19 +154,19 @@ function showEventCreator() {
   //   hideEventCreator();
   // });
 
-  eventForm.addEventListener("submit", (e) => {
-    submitEvent(e.target);
-  });
+  // eventForm.addEventListener("submit", (e) => {
+  //   submitEvent(e.target);
+  // });
   //additional listener for 'delete event' button option.  reads click on id="deleteEventButton" and runs the deletion function.
-  deleteEventButton.addEventListener("click", () => {
-    //failure guardrail
-    if (!editingEventUID) {
-      return;
-    }
-    StorageManager.deleteEvent(editingEventUID);
-    hideEventCreator();
-    calenderEventRefresh();
-  });
+  // deleteEventButton.addEventListener("click", () => {
+  //   //failure guardrail
+  //   if (!editingEventUID) {
+  //     return;
+  //   }
+  //   StorageManager.deleteEvent(editingEventUID);
+  //   hideEventCreator();
+  //   calenderEventRefresh();
+  // });
 }
 
 /**
@@ -194,6 +194,10 @@ function prepareAddEventMode() {
   }
   //reset function is a cool prebuilt brower function that resets to default.  This clears data for when we switch back to 'Add Event' mode. just thought it was cool.
   // eventForm.reset();
+}
+
+function deleteEventHandler(event) {
+
 }
 
 //Function to open 'edit event' mode and, and display contents of event in correct fields

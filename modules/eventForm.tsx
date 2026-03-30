@@ -6,17 +6,17 @@ import { hideEventCreator } from "./eventManager";
 import { submitEvent } from "./eventManager";
 
 type eventFormProps = {
-  UID: string | null;
+  UID?: string;
   onCancel: () => void;
   onDelete: (UID: any) => void;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (event: React.SubmitEvent<HTMLFormElement>) => void;
 };
 
 export default function EventForm({ UID, onCancel, onDelete, onSubmit }: eventFormProps) {
   if (!UID) {
     // If UID is null, return an empty event form submission
     return (
-      <div id="eventPopupContainer" className="hidden">
+      <div id="eventPopupContainer" className="">
         <form id="eventForm" onSubmit={onSubmit}>
           <h2 id="eventFormTitle">Add Event</h2>
           <label htmlFor="eventTitle">
@@ -94,6 +94,6 @@ export default function EventForm({ UID, onCancel, onDelete, onSubmit }: eventFo
       </div>
     );
   } else {
-    openEventEditor(UID);
+    // TODO: Implement event editing functionality
   }
 }
