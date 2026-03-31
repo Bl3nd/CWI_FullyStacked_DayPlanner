@@ -52,6 +52,7 @@ class AppState {
 
     // Set date view to current date in "YYYY-MM-DD" format
     this._dateView = new Date().toLocaleDateString("en-CA");
+    console.log(this._dateView);
     // Load calendar view from storage, default to "day" if not saved
     this._calendarView = StorageManager.loadCalendarView();
   }
@@ -86,7 +87,8 @@ class AppState {
    * Returns an array of CalendarEvent objects for the specified date.
    * If no events exist for that date, returns an empty array.
    * @param date "YYYY-MM-DD" formatted date string to retrieve events for
-   * @returns
+   * @returns Array of CalendarEvent objects for the specified date,
+   * or [] if no events exist for that date
    */
   getEventsByDate(date: string): CalendarEvent[] {
     return this._eventsByDate.get(date) || [];
@@ -177,6 +179,16 @@ class AppState {
    */
   get dateView(): string {
     return this._dateView;
+  }
+
+  /**
+   * Returns the current date view as a Date object.
+   * @returns Date object representing the current date view
+   */
+  get dateViewObject(): Date {
+    const [year, month, day] = this._dateView.split("-").map(Number);
+    //@ts-ignore - TypeScript thinks this._dateView.split("-") could be undefined, but we always set it in the constructor and validate it in the setter
+    return new Date(year, month - 1, day);
   }
 
   /**
