@@ -2,24 +2,15 @@ import generateUID from "./UIDGenerator";
 import StorageManager from "./dataStorage";
 import CalendarEvent from "./classCalendarEvent";
 import { renderCalendarView } from "./calendar/calendar";
-import React from "react";
-import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 import EventForm from "./eventForm";
+import appState from "./appState";
 
-const eventPopupContainer = document.getElementById("eventPopupContainer");
+// Form input references
 const eventTitleInput = document.getElementById("eventTitle");
 const endTimeInput = document.getElementById("eventEndTime");
 const eventDateInput = document.getElementById("eventDate");
 const eventFormRootElement = document.getElementById("eventFormRoot");
-
-//C-3 editing constants
-const eventForm = document.getElementById("eventForm");
-const eventFormTitle = document.getElementById("eventFormTitle");
-const startTimeInput = document.getElementById("eventStartTime");
-const eventColorInput = document.getElementById("eventColor");
-const eventAddressInput = document.getElementById("eventAddress");
-const eventDescriptionInput = document.getElementById("eventDescription");
 
 //edit state variable
 let editingEventUID = null;
@@ -33,7 +24,7 @@ function initializeEventManager() {
 
   addEventButton.addEventListener("click", () => {
     prepareAddEventMode();
-    showEventCreator();
+    showEventManager();
   });
 
   //additional listener for 'edit event' option.  Reads clicks on event targets and stores eventUID then runs openEventEditor() based on eventUID.
@@ -46,8 +37,34 @@ function initializeEventManager() {
     }
 
     const eventUID = clickedEventButton.dataset.eventId;
-    openEventEditor(eventUID);
+    showEventManager(eventUID);
   });
+}
+
+/**
+ *  Show (and close) event creation and editing form. Will create a new React root each time it is called, then will unmount itself when the form is closed.
+ * Resets form fields automatically.
+ * @param {string} UID - OPTIONAL: If provided, the form will load the event corresponding to the UID for editing or deletion.
+ */
+function showEventManager(UID = null) {
+  const eventFormRoot = createRoot(eventFormRootElement);
+  eventFormRoot.render(
+    <EventForm UID={UID} onCancel={close} onSubmit={submit} onDelete={deleteEvent} />,
+  );
+  
+  function close() {
+    eventFormRoot.unmount();
+  }
+
+  function submit(component) {
+    submitEvent(component);
+    close();
+  }
+
+  function deleteEvent() {
+    StorageManager.deleteEvent(UID);
+    close();
+  }
 }
 
 /** 
@@ -141,86 +158,18 @@ function validateEventSubmission(event) {
 }
 
 /**
- *  Show event creation form
- */
-function showEventCreator() {
-  const eventFormRoot = createRoot(eventFormRootElement);
-  eventFormRoot.render(
-    <EventForm UID={null} onCancel={close} onSubmit={submit} onDelete={deleteEvent} />,
-  );
-  
-  function close() {
-    eventFormRoot.unmount();
-  }
-
-  function submit(component) {
-    submitEvent(component);
-    close();
-  }
-
-  function deleteEvent() {
-    StorageManager.deleteEvent(UID);
-    close();
-  }
-}
-
-/**
- * functions for editing events for C-3
- */
-//This function is used to reset back to a blank slate for switching from edit mode back to add mode.  function added to initializeEventManager() in addEventButton.addEventListener to reset on click.
-function prepareAddEventMode() {
-  editingEventUID = null;
-  if (eventFormTitle) {
-    eventFormTitle.textContent = "Add Event";
-  }
-  //reset function is a cool prebuilt brower function that resets to default.  This clears data for when we switch back to 'Add Event' mode. just thought it was cool.
-  // eventForm.reset();
-}
-
-//Function to open 'edit event' mode and, and display contents of event in correct fields
-function openEventEditor(eventUID) {
-  const allEvents = StorageManager.loadAllEvents();
-  // checks through event array and returns on a matching value to what's clicked.  If anyone nows an easier way then combing all events let me know.
-  const eventToEdit = allEvents.find((event) => event.UID === eventUID);
-
-  //failure guardrail
-  if (!eventToEdit) {
-    console.error(`could not find event with UID: ${eventUID}`);
-    return;
-  }
-
-  editingEventUID = eventUID;
-
-  //sets popup title to Edit instead of Add
-  if (eventFormTitle) {
-    eventFormTitle.textContent = "Edit Event";
-  }
-
-  //saveds stored eventUID form values to populate in the correct locations.
-  eventTitleInput.value = eventToEdit.title;
-  eventDateInput.value = eventToEdit.date;
-  startTimeInput.value = eventToEdit.timeStart;
-  endTimeInput.value = eventToEdit.timeEnd;
-  eventColorInput.value = eventToEdit.color ?? "#ffffff";
-  eventAddressInput.value = eventToEdit.address ?? "";
-  eventDescriptionInput.value = eventToEdit.description ?? "";
-
-  showEventCreator();
-}
-
-/**
- * re-render function after adding, editing, or deleting an event
+ * re-render events displayed after adding, editing, or deleting an event
  */
 function calenderEventRefresh() {
   const headerDateContainer = document.getElementById("headerDateContainer");
   const headerDateText = headerDateContainer.textContent;
   const headerDateRender = new Date(headerDateText);
-  const allEvents = StorageManager.loadAllEvents();
+  const allEvents = appState.allEventsByUID;
   renderCalendarView(allEvents, headerDateRender, "day");
 }
 
 export {
   initializeEventManager,
-  openEventEditor,
+  showEventManager,
   submitEvent,
 };

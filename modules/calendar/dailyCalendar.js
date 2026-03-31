@@ -1,7 +1,7 @@
 "use strict";
 
 import * as Calendar from "./calendar";
-import {openEventEditor} from "../eventManager";
+import {showEventManager} from "../eventManager";
 
 // Render the single day view of the calendar
 export function renderSingleDay(events, viewDate) {
@@ -330,6 +330,6 @@ function closeClickedEventPopup() {
 
 // Will open the editor for the selected event
 function editClickedEventPopup(event) {
-  openEventEditor(event.UID);
+  showEventManager(event.UID);
   closeClickedEventPopup();
 }

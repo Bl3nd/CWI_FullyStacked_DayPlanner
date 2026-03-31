@@ -1,4 +1,6 @@
 import React from "react";
+import appState from "./appState";
+import CalendarEvent from "./classCalendarEvent";
 
 type eventFormProps = {
   UID?: string;
@@ -7,87 +9,106 @@ type eventFormProps = {
   onSubmit: (event: React.SubmitEvent<HTMLFormElement>) => void;
 };
 
-export default function EventForm({ UID, onCancel, onDelete, onSubmit }: eventFormProps) {
-  const today: string = new Date().toISOString().slice(0, 10);
-  const title: string = "Add Event";
+export default function EventForm({
+  UID,
+  onCancel,
+  onDelete,
+  onSubmit,
+}: eventFormProps) {
+  // Form variables
+  const title: string = UID? "Edit Event" :"Add Event";
+  // Pull all events from appState
+  const allEvents: Map<string, CalendarEvent> = appState.allEventsByUID;
+  const targetEvent: CalendarEvent | undefined = UID? allEvents.get(UID) : undefined;
   // If UID is null, return an empty event form submission
   // TODO: Implement event editing functionality
-    return (
-      <div id="eventPopupContainer" className="">
-        <form id="eventForm" onSubmit={onSubmit}>
-          <h2 id="eventFormTitle">{title}</h2>
-          <label htmlFor="eventTitle">
-            Event Name <span>*</span>
+  return (
+    <div
+      id="eventPopupContainer"
+      // Close form if user clicks outside of it
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onCancel();
+        }
+      }}
+    >
+      <form id="eventForm" onSubmit={onSubmit}>
+        <h2 id="eventFormTitle">{title}</h2>
+        <label htmlFor="eventTitle">
+          Event Name <span className="text-danger">*</span>
+        </label>
+        <input type="text" id="eventTitle" name="title" defaultValue={targetEvent?.title} required />
+        <label htmlFor="eventDate">
+          Date <span className="text-danger">*</span>
+        </label>
+        <input type="date" id="eventDate" name="date" defaultValue={targetEvent?.date ?? appState.dateView} required />
+        <div id="timeContainer">
+          <label htmlFor="eventStartTime">
+            Start Time <span className="text-danger">*</span>
           </label>
-          <input type="text" id="eventTitle" name="title" required />
-          <label htmlFor="eventDate">
-            Date <span>*</span>
-          </label>
-          <input type="date" id="eventDate" name="date" value={today} required />
-          <div id="timeContainer">
-            <label htmlFor="eventStartTime">
-              Start Time <span>*</span>
-            </label>
-            <input
-              type="time"
-              id="eventStartTime"
-              name="timeStart"
-              step={900}
-              required
-            />
-            <label htmlFor="eventEndTime">
-              End Time <span>*</span>
-            </label>
-            <input
-              type="time"
-              id="eventEndTime"
-              name="timeEnd"
-              step={900}
-              required
-            />
-            <label htmlFor="eventColor">Color</label>
-            <input
-              type="color"
-              id="eventColor"
-              name="color"
-              defaultValue="#ffffff"
-              list="colorOptions"
-            />
-            <datalist id="colorOptions">
-              <option value="#ffffff">White</option>
-              <option value="#ff0000">Red</option>
-              <option value="#00ff00">Green</option>
-              <option value="#0000ff">Blue</option>
-              <option value="#ffff00">Yellow</option>
-              <option value="#ff00ff">Magenta</option>
-              <option value="#00ffff">Cyan</option>
-            </datalist>
-          </div>
-          <label htmlFor="eventAddress">Address</label>
           <input
-            type="text"
-            id="eventAddress"
-            name="address"
-            autoComplete="street-address"
+            type="time"
+            id="eventStartTime"
+            name="timeStart"
+            defaultValue={targetEvent?.timeStart}
+            step={900}
+            required
           />
-          <label htmlFor="eventDescription">Description</label>
-          <textarea
-            id="eventDescription"
-            name="description"
-            rows={4}
-            cols={50}
-            defaultValue={""}
+          <label htmlFor="eventEndTime">
+            End Time <span>*</span>
+          </label>
+          <input
+            type="time"
+            id="eventEndTime"
+            name="timeEnd"
+            defaultValue={targetEvent?.timeEnd}
+            step={900}
+            required
           />
-          <div id="eventFormButtonsContainer">
-            <button type="submit">Submit</button>
-            <button type="button" onClick={onCancel} id="cancelEventButton">
-              Cancel
-            </button>
-            <button type="button" onClick={onDelete} id="deleteEventButton">
-              Delete
-            </button>
-          </div>
-        </form>
-      </div>
-    );
+          <label htmlFor="eventColor">Color</label>
+          <input
+            type="color"
+            id="eventColor"
+            name="color"
+            defaultValue={targetEvent?.color ?? "#ffffff"}
+            list="colorOptions"
+          />
+          <datalist id="colorOptions">
+            <option value="#ffffff">White</option>
+            <option value="#ff0000">Red</option>
+            <option value="#00ff00">Green</option>
+            <option value="#0000ff">Blue</option>
+            <option value="#ffff00">Yellow</option>
+            <option value="#ff00ff">Magenta</option>
+            <option value="#00ffff">Cyan</option>
+          </datalist>
+        </div>
+        <label htmlFor="eventAddress">Address</label>
+        <input
+          type="text"
+          id="eventAddress"
+          name="address"
+          autoComplete="street-address"
+          defaultValue={targetEvent?.address}
+        />
+        <label htmlFor="eventDescription">Description</label>
+        <textarea
+          id="eventDescription"
+          name="description"
+          defaultValue={targetEvent?.description}
+          rows={4}
+          cols={50}
+        />
+        <div id="eventFormButtonsContainer">
+          <button type="submit">Save</button>
+          <button type="button" onClick={onCancel} id="cancelEventButton">
+            Cancel
+          </button>
+          {UID? <button type="button" onClick={onDelete} id="deleteEventButton">
+            Delete
+          </button> : undefined}
+        </div>
+      </form>
+    </div>
+  );
 }
