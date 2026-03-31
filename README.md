@@ -4,6 +4,8 @@ A team project for CWI's CPSC-208 Intro to Full Stack Web Development course.
 Bryan, Allan, Cody, Bridger, Caleb, and Matt will all work together to create
 a simple day planner that shows a weather forecast. 
 
+[Check out the live page](https://socrastein.github.io/CWI_FullyStacked_DayPlanner/)
+
 <br>
 
 Inititial plans are to implement the following features: 
