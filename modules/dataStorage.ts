@@ -1,4 +1,5 @@
-import CalendarEvent from "./classCalendarEvent.js";
+import CalendarEvent from "./classCalendarEvent";
+import { CalendarViews } from "./enumCalendarViews";
 
 // TODO: replace confirm() dialogs in deletion methods with Bootstrap modal
 
@@ -6,7 +7,8 @@ import CalendarEvent from "./classCalendarEvent.js";
 const savedEventPrefix = "CalendarEvent_";
 
 /**
- * StorageManager is responsible for saving, deleting, and loading calendar events from localStorage.
+ * StorageManager is responsible for saving, deleting, and loading
+ * calendar events and UI view from localStorage.
  */
 const StorageManager = {
   /**
@@ -15,7 +17,7 @@ const StorageManager = {
    * Saves in localStorage with key = savedEventPrefix + UID
    * @param calEvent object CalendarEvent type with string properties: UID, date, time, title, description, address, color
    */
-  saveEvent(calEvent) {
+  saveEvent(calEvent: CalendarEvent): void {
     // UID is used in storage key, so exclude it from the stored data to avoid redundancy
     const excludedDataProperty = "UID";
     const jsonString = JSON.stringify(calEvent, (key, value) => {
@@ -32,7 +34,7 @@ const StorageManager = {
    * For each matching item, retrieve the data from the item's value and combine with the UID from the key to create an Event object,
    * @returns an array with all Event objects that are saved in storage
    */
-  loadAllEvents() {
+  loadAllEvents(): CalendarEvent[] {
     const length = localStorage.length;
     const events = [];
     for (let i = 0; i < length; i++) {
@@ -54,7 +56,7 @@ const StorageManager = {
    * Prompts the user for confirmation before deleting the event with the specified UID.
    * @param UID indentifier string from the CalendarEvent object to be deleted
    */
-  deleteEvent(UID) {
+  deleteEvent(UID: string): void {
     if (
       confirm(
         "Are you sure you want to delete this event? This action cannot be undone.",
@@ -67,7 +69,7 @@ const StorageManager = {
   /**
    * Prompts the user TWICE for confirmation before deleting all events from localStorage.
    */
-  deleteAllEvents() {
+  deleteAllEvents(): void {
     if (
       confirm(
         "Are you sure you want to delete all events? This action cannot be undone.",
@@ -91,6 +93,37 @@ const StorageManager = {
         // Remove all identified CalendarEvent keys from localStorage
         keysToDelete.forEach((key) => localStorage.removeItem(key));
       }
+    }
+  },
+
+  /**
+   * Saves the current view (day, month, year) of the calendar in localStorage
+   * to be used next time app is loaded
+   * @param view Value from CalendarViews enumerator
+   */
+  saveCalendarView(view: CalendarViews): void {
+    localStorage.setItem("CalendarView", view);
+  },
+
+  /**
+   * Loads saved calendar view (day, month, year) from localStorage
+   * @returns string Defaults to "day" if no valid saved value found
+   */
+  loadCalendarView(): CalendarViews {
+    const view = localStorage.getItem("CalendarView");
+    switch (view) {
+      case "day":
+        return CalendarViews.Day;
+      case "week":
+        return CalendarViews.Week;
+      case "month":
+        return CalendarViews.Month;
+      // Should log 'is undefined' unless an invalid value was saved
+      default:
+        console.log(
+          `Saved CalendarView is ${view}, loading day view by default.`,
+        );
+        return CalendarViews.Day;
     }
   },
 };

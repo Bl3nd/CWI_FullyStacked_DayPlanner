@@ -1,8 +1,8 @@
 "use strict";
 
-import { renderSingleDay } from "./dailyCalendar.js";
-import { renderSingleWeek } from "./weeklyCalendar.js";
-import { renderSingleMonth } from "./monthlyCalendar.js";
+import { renderSingleDay } from "./dailyCalendar";
+import { renderSingleWeek } from "./weeklyCalendar";
+import { renderSingleMonth } from "./monthlyCalendar";
 
 /*
    !!! This is the entry point for the calendar module. It is used to render the calendar view based on the calendar view type.

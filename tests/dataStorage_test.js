@@ -1,7 +1,7 @@
-import localStorageMock from "./mockStorage.js";
+import localStorageMock from "./mockStorage";
 
-import StorageManager from "../modules/dataStorage.js";
-import CalendarEvent from "../modules/classCalendarEvent.js";
+import StorageManager from "../modules/dataStorage";
+import CalendarEvent from "../modules/classCalendarEvent";
 
 function storageTests() {
   let passed = 0;

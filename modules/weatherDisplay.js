@@ -1,5 +1,5 @@
-import { weatherKey } from "./weatherKey.js";
-import appSettings from "./settings.js";
+import { weatherKey } from "./weatherKey";
+import appSettings from "./settings";
 
 // weather api key
 const API_KEY = weatherKey.key;

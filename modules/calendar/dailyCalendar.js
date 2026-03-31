@@ -1,7 +1,7 @@
 "use strict";
 
-import * as Calendar from "./calendar.js";
-import {openEventEditor} from "../eventManager.js";
+import * as Calendar from "./calendar";
+import {openEventEditor} from "../eventManager";
 
 // Render the single day view of the calendar
 export function renderSingleDay(events, viewDate) {

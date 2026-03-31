@@ -1,4 +1,4 @@
-import appSettings from "./settings.js";
+import appSettings from "./settings";
 
 // Icons for menuItems
 import moonIcon from "../assets/icons/moon.svg";

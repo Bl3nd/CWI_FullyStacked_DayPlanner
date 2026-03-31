@@ -1,4 +1,4 @@
-import CalendarEvent from "../modules/classCalendarEvent.js";
+import CalendarEvent from "../modules/classCalendarEvent";
 
 function eventTests() {
   let passed = 0;

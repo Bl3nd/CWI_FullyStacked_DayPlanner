@@ -1,6 +1,6 @@
 // C-7-Today: Button resets the date view to current date and updates header. passes events loaded from main.js via StorageManager.loadAllEvents().
-import { renderCalendarView } from "./calendar/calendar.js";
-import StorageManager from "./dataStorage.js";
+import { renderCalendarView } from "./calendar/calendar";
+import StorageManager from "./dataStorage";
 
 export default function initTodayButton() {
   //appState sets default: day view centered on 'today' (per D-1-Current)

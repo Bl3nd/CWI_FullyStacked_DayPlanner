@@ -1,7 +1,7 @@
-import generateUID from "./UIDGenerator.js";
-import StorageManager from "./dataStorage.js";
-import CalendarEvent from "./classCalendarEvent.js";
-import { renderCalendarView } from "./calendar/calendar.js";
+import generateUID from "./UIDGenerator";
+import StorageManager from "./dataStorage";
+import CalendarEvent from "./classCalendarEvent";
+import { renderCalendarView } from "./calendar/calendar";
 
 const eventPopupContainer = document.getElementById("eventPopupContainer");
 const eventTitleInput = document.getElementById("eventTitle");

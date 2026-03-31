@@ -1,6 +1,6 @@
-import eventTests from "./classCalendarEvent_test.js";
-import storageTests from "./dataStorage_test.js";
-import settingsTests from "./settings_test.js";
+import eventTests from "./classCalendarEvent_test";
+import storageTests from "./dataStorage_test";
+import settingsTests from "./settings_test";
 
 function runTests() {
   eventTests();

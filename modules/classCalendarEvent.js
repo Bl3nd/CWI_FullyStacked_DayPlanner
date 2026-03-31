@@ -1,4 +1,4 @@
-import generateUID from "./UIDGenerator.js";
+import generateUID from "./UIDGenerator";
 
 /**
  * Event class represents a calendar event and includes validation for date and time formats.
