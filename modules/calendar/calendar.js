@@ -32,9 +32,11 @@ export function renderCalendarView(
   const calendarViewArea = document.getElementById("calendarViewArea");
   if (calendarViewArea)
     calendarViewArea.setAttribute("data-calendar-view", calendarView); // Sets the 'data-calendar-view' attribute so we can show/hide the correct content.
+  
+  const filteredDateEvents = appState.getEventsByDate(viewDate.toLocaleDateString("en-CA"))
   switch (calendarView) {
     case CalendarView.DAY:
-      renderSingleDay(filterEventsForDate(viewDate), viewDate);
+      renderSingleDay(filteredDateEvents, viewDate);
       break;
     case CalendarView.WEEK:
       renderSingleWeek(events, viewDate);
@@ -43,16 +45,8 @@ export function renderCalendarView(
       renderSingleMonth(events, viewDate);
       break;
     default:
-      renderSingleDay(filterEventsForDate(viewDate), viewDate);
+      renderSingleDay(filteredDateEvents, viewDate);
   }
-}
-
-// Filters the events to only include events for the given date.
-function filterEventsForDate(viewDate) {
-  const year = viewDate.getFullYear();
-  const month = String(viewDate.getMonth() + 1).padStart(2, "0");
-  const day = String(viewDate.getDate()).padStart(2, "0");
-  return appState.getEventsByDate(`${year}-${month}-${day}`);
 }
 
 // Formats the time slot time (e.g. 10:00 AM). Not using the event times!

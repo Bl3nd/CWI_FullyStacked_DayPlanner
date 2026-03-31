@@ -9,14 +9,9 @@ import { CalendarViews } from "../enumCalendarViews";
 
 /**
  * Initializes the calendar UI and renders the components. This function should only call the render functions for the calendar UI components.
- * @param allEvents - All events to be displayed in the calendar.
  * @returns void
  */
 function initializeCalendarUI(): void {
-  // Moved from main.js
-
-  console.log("Appstate dateView", appState.dateView);
-
   renderCalendarViewButtons(); // Render the 'Day', 'Week', 'Month' buttons.
   renderCalendarNavigationButtons(); // Render the previous and next buttons.
 

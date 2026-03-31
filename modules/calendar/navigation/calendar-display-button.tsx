@@ -26,7 +26,7 @@ function CalendarDisplayButton({
   return (
     <button
       type="button"
-      className={`btn btn-sm ${isActive ? "btn-primary" : "btn-outline-primary"}`}
+      className={`btn btn-sm ${isActive ? "btn-primary" : "btn-secondary"}`}
       onClick={onClick}
     >
       {label}
