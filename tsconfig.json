@@ -10,7 +10,7 @@
     "target": "ES6",
     "types": [],
     // For nodejs:
-    "lib": ["esnext", "DOM"],
+    "lib": ["esnext", "DOM", "DOM.Iterable"],
     // "types": ["node"],
     // and npm install -D @types/node
 

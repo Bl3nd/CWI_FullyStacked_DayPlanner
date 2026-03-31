@@ -3,7 +3,7 @@ import appState from "./appState";
 import CalendarEvent from "./classCalendarEvent";
 
 type eventFormProps = {
-  UID?: string;
+  UID: string | null;
   onCancel: () => void;
   onDelete: (UID: any) => void;
   onSubmit: (event: React.SubmitEvent<HTMLFormElement>) => void;
@@ -18,10 +18,8 @@ export default function EventForm({
   // Form variables
   const title: string = UID? "Edit Event" :"Add Event";
   // Pull all events from appState
-  const allEvents: Map<string, CalendarEvent> = appState.allEventsByUID;
-  const targetEvent: CalendarEvent | undefined = UID? allEvents.get(UID) : undefined;
+  const targetEvent: CalendarEvent | undefined = UID? appState.getEventByUID(UID) : undefined;
   // If UID is null, return an empty event form submission
-  // TODO: Implement event editing functionality
   return (
     <div
       id="eventPopupContainer"

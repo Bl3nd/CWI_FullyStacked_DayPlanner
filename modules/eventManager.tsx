@@ -2,84 +2,84 @@ import generateUID from "./UIDGenerator";
 import StorageManager from "./dataStorage";
 import CalendarEvent from "./classCalendarEvent";
 import { renderCalendarView } from "./calendar/calendar";
-import { createRoot } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
+import React from "react";
 import EventForm from "./eventForm";
 import appState from "./appState";
 
-// Form input references
-const eventTitleInput = document.getElementById("eventTitle");
-const endTimeInput = document.getElementById("eventEndTime");
-const eventDateInput = document.getElementById("eventDate");
-const eventFormRootElement = document.getElementById("eventFormRoot");
+// TODO: Add non null verification/exception handling
+
+// Root element for event form component
+const eventFormRootElement: HTMLElement | null = document.getElementById("eventFormRoot");
 
 //edit state variable
-let editingEventUID = null;
+let editingEventUID: string | null = null;
 
 /**
- * Initializes the event manager by setting up event listeners for the "Add Event" button, "Cancel" button, and the event form submission.
+ * Initializes the event manager by setting up event listener for the "Add Event" button.
  */
-function initializeEventManager() {
-  const addEventButton = document.getElementById("addEventButton");
-  const calendarEventsLayer = document.getElementById("calendarEventsLayer");
+function initializeEventManager(): void {
+  const addEventButton: HTMLElement | null = document.getElementById("addEventButton");
+  const calendarEventsLayer: HTMLElement | null = document.getElementById("calendarEventsLayer");
 
-  addEventButton.addEventListener("click", () => {
-    prepareAddEventMode();
+  addEventButton?.addEventListener("click", () => {
     showEventManager();
   });
 
   //additional listener for 'edit event' option.  Reads clicks on event targets and stores eventUID then runs openEventEditor() based on eventUID.
 
-  calendarEventsLayer.addEventListener("click", (event) => {
-    const clickedEventButton = event.target.closest("[data-event-id]");
+  calendarEventsLayer?.addEventListener("click", (event) => {
+    const clickedEventButton: HTMLElement = (event.currentTarget as HTMLElement).closest("[data-event-id]")!;
 
     if (!clickedEventButton) {
       return;
     }
 
-    const eventUID = clickedEventButton.dataset.eventId;
+    const eventUID: string = clickedEventButton.dataset.eventId!;
     showEventManager(eventUID);
   });
 }
 
 /**
- *  Show (and close) event creation and editing form. Will create a new React root each time it is called, then will unmount itself when the form is closed.
+ * Show (and close) event creation and editing form. Will create a new React root each time it is called, then will unmount itself when the form is closed.
  * Resets form fields automatically.
  * @param {string} UID - OPTIONAL: If provided, the form will load the event corresponding to the UID for editing or deletion.
  */
-function showEventManager(UID = null) {
-  const eventFormRoot = createRoot(eventFormRootElement);
+function showEventManager(UID: string | null = null): void {
+  const eventFormRoot: Root | null = createRoot(eventFormRootElement!);
   eventFormRoot.render(
     <EventForm UID={UID} onCancel={close} onSubmit={submit} onDelete={deleteEvent} />,
   );
   
   function close() {
-    eventFormRoot.unmount();
+    eventFormRoot!.unmount();
   }
 
-  function submit(component) {
+  function submit(component: React.SubmitEvent<HTMLFormElement>) {
     submitEvent(component);
     close();
   }
 
   function deleteEvent() {
-    StorageManager.deleteEvent(UID);
+    StorageManager.deleteEvent(UID!);
+    calenderEventRefresh();
     close();
   }
 }
 
 /** 
- * Handle form submission for creating a new calendar event
- * Extracts data from the form, performs data validation, creates an event object, and assigns it a unique identifier (UID)
+ * Handle form submission for creating a new calendar event.
+ * Extracts data from the form, performs data validation, creates a CalendarEvent object, and assigns it a unique identifier (UID).
  * Uses StorageManager to store the event in localStorage
  * @param {HTMLFormElement} event - The form element containing event details
  */
-function submitEvent(event) {
+function submitEvent(event: React.SubmitEvent<HTMLFormElement>): void {
   event.preventDefault();
   // Pull form from the event
-  const eventForm = event.currentTarget;
+  const eventForm: HTMLFormElement = event.currentTarget;
   // Extract form data and create event object
-  const data = new FormData(eventForm);
-  const eventProps = Object.fromEntries(data);
+  const data: FormData= new FormData(eventForm);
+  const eventProps: any = Object.fromEntries(data);
   // Validate form input data
   if (!validateEventSubmission(eventProps)) {
     eventForm.reportValidity();
@@ -90,7 +90,7 @@ function submitEvent(event) {
   const id = editingEventUID ?? generateUID();
   eventProps.UID = id;
   const newEvent = new CalendarEvent(eventProps);
-  StorageManager.saveEvent(newEvent);
+  appState.addEvent(newEvent);
   calenderEventRefresh();
   console.log("Event saved (UID: " + id + ")");
   console.log(newEvent);
@@ -100,19 +100,24 @@ function submitEvent(event) {
  * Validates the submission of a new calendar event.
  * Performs checks on the event title, date, and time to ensure they meet specified criteria. Validation messages are shown for any invalid input,
  * and are cleared when the user starts correcting the input.
- * @param {*} event - The event object containing submission data
- * @returns {boolean} - True if the event is valid, false otherwise
+ * @param {CalendarEvent} event - The event object containing submission data
+ * @returns {boolean} True if the event is valid, false otherwise
  */
-function validateEventSubmission(event) {
+function validateEventSubmission(event: CalendarEvent): boolean {
+// Form input references
+const eventTitleInput: HTMLInputElement | null = document.getElementById("eventTitle") as HTMLInputElement;
+const endTimeInput: HTMLInputElement | null = document.getElementById("eventEndTime") as HTMLInputElement;
+const eventDateInput: HTMLInputElement | null = document.getElementById("eventDate") as HTMLInputElement;
+
   // Title validation
   if (event.title.trim() === "" || event.title.length > 100) {
-    eventTitleInput.setCustomValidity(
+    eventTitleInput!.setCustomValidity(
       "Event title cannot be empty or exceed 100 characters.",
     );
-    eventTitleInput.addEventListener(
+    eventTitleInput!.addEventListener(
       "input",
       () => {
-        eventTitleInput.setCustomValidity("");
+        eventTitleInput!.setCustomValidity("");
       },
       { once: true },
     );
@@ -160,16 +165,15 @@ function validateEventSubmission(event) {
 /**
  * re-render events displayed after adding, editing, or deleting an event
  */
-function calenderEventRefresh() {
-  const headerDateContainer = document.getElementById("headerDateContainer");
-  const headerDateText = headerDateContainer.textContent;
-  const headerDateRender = new Date(headerDateText);
-  const allEvents = appState.allEventsByUID;
+function calenderEventRefresh(): void {
+  const headerDateContainer: HTMLElement | null = document.getElementById("headerDateContainer");
+  const headerDateText = headerDateContainer?.textContent;
+  const headerDateRender = new Date(headerDateText!);
+  const allEvents = Array.from(appState.allEventsByUID);
   renderCalendarView(allEvents, headerDateRender, "day");
 }
 
 export {
   initializeEventManager,
   showEventManager,
-  submitEvent,
 };
