@@ -116,7 +116,7 @@ function renderCalendarHeaderDisplay(calendarState: CalendarUIState): void {
     const renderHeaderDateDisplay = () => {
       // We know that the root does exist at this point.
       headerDateContainerRoot!.render(
-        <CalendarHeaderDisplay state={{viewDate: calendarState.viewDate, calendarView: appState.calendarView}} />,
+        <CalendarHeaderDisplay state={calendarState} />,
       );
     };
 

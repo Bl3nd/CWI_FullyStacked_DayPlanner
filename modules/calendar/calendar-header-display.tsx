@@ -1,10 +1,8 @@
+import appState from "../appState";
 import { CalendarViews } from "../enumCalendarViews";
 
 type CalendarHeaderDisplayProps = {
-  state: {
-    viewDate: Date;
-    calendarView: CalendarViews;
-  };
+  state: { viewDate: Date };
 };
 
 /**
@@ -13,10 +11,11 @@ type CalendarHeaderDisplayProps = {
  * @returns The JSX element
  */
 function CalendarHeaderDisplay({ state }: CalendarHeaderDisplayProps) {
-  // Get the viewing date and calendar view from the state.
-  const { viewDate: viewingDate, calendarView } = state;
-
-  return <span>{formatHeaderDate(viewingDate, calendarView)}</span>;
+  return (
+    <span>
+      {formatHeaderDate(state.viewDate, appState.calendarView)}
+    </span>
+  );
 }
 
 // Formats the header date based on the viewing date and calendar view
