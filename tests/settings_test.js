@@ -6,14 +6,16 @@ function settingsTests() {
   let passed = 0;
   let failed = 0;
 
-  // Replace localStorage with mock version
   localStorageMock.initialize();
+
+  // Silence console.warn during expected-failure tests
+  const originalWarn = console.warn;
+  console.warn = () => {};
 
   // ─── HELPERS ──────────────────────────────────────────────────────────────────
 
   function expectValue(label, actual, expected) {
     if (actual === expected) {
-      console.log(`✅ PASS — "${label}"`);
       passed++;
     } else {
       console.error(
@@ -24,8 +26,7 @@ function settingsTests() {
   }
 
   // ─── DEFAULTS ─────────────────────────────────────────────────────────────────
-
-  console.group("restoreDefaults()");
+  console.log("🧪 Testing appSettings...");
 
   appSettings.restoreDefaults();
   expectValue("lightMode defaults to 'light'", appSettings.lightMode, "light");
@@ -46,11 +47,7 @@ function settingsTests() {
     true,
   );
 
-  console.groupEnd();
-
   // ─── LIGHTMODE ────────────────────────────────────────────────────────────────
-
-  console.group("lightMode");
 
   appSettings.restoreDefaults();
   appSettings.lightMode = "fail";
@@ -68,11 +65,7 @@ function settingsTests() {
     "light",
   );
 
-  console.groupEnd();
-
   // ─── TEMPUNIT ─────────────────────────────────────────────────────────────────
-
-  console.group("tempUnit");
 
   appSettings.restoreDefaults();
   appSettings.tempUnit = "Kelvin";
@@ -94,11 +87,7 @@ function settingsTests() {
     "Fahrenheit",
   );
 
-  console.groupEnd();
-
   // ─── COLORTHEME ───────────────────────────────────────────────────────────────
-
-  console.group("colorTheme");
 
   appSettings.restoreDefaults();
   appSettings.colorTheme = "invalid";
@@ -138,11 +127,7 @@ function settingsTests() {
   appSettings.colorTheme = "blue";
   expectValue("Valid value 'blue' is accepted", appSettings.colorTheme, "blue");
 
-  console.groupEnd();
-
   // ─── FIRSTDAYOFWEEK ───────────────────────────────────────────────────────────
-
-  console.group("firstDayOfWeek");
 
   appSettings.restoreDefaults();
   appSettings.firstDayOfWeek = "Tuesday";
@@ -164,11 +149,7 @@ function settingsTests() {
     "Sunday",
   );
 
-  console.groupEnd();
-
   // ─── DISPLAYHOLIDAYS ──────────────────────────────────────────────────────────
-
-  console.group("displayHolidays");
 
   appSettings.restoreDefaults();
   appSettings.displayHolidays = "yes";
@@ -196,13 +177,8 @@ function settingsTests() {
     true,
   );
 
-  console.groupEnd();
-
   // ─── SAVE AND LOAD ────────────────────────────────────────────────────────────
 
-  console.group("saveSettings() and loadSettings()");
-
-  // Set non-default values and save
   appSettings.restoreDefaults();
   appSettings.lightMode = "dark";
   appSettings.tempUnit = "Celsius";
@@ -216,7 +192,6 @@ function settingsTests() {
     true,
   );
 
-  // Restore defaults then load — saved values should come back
   appSettings.restoreDefaults();
   appSettings.loadSettings();
   expectValue(
@@ -245,13 +220,9 @@ function settingsTests() {
     false,
   );
 
-  // Corrupt the stored JSON and verify loadSettings() handles it gracefully without throwing
   localStorage.setItem("DayPlannerSettings", "this is not valid json {{{");
   try {
     appSettings.loadSettings();
-    console.log(
-      `✅ PASS — "loadSettings() handles corrupted JSON without throwing"`,
-    );
     passed++;
   } catch (e) {
     console.error(
@@ -260,13 +231,9 @@ function settingsTests() {
     failed++;
   }
 
-  // Verify loadSettings() handles missing key gracefully
   localStorage.removeItem("DayPlannerSettings");
   try {
     appSettings.loadSettings();
-    console.log(
-      `✅ PASS — "loadSettings() handles missing localStorage key without throwing"`,
-    );
     passed++;
   } catch (e) {
     console.error(
@@ -275,22 +242,22 @@ function settingsTests() {
     failed++;
   }
 
-  console.groupEnd();
-
   // ─── SUMMARY ──────────────────────────────────────────────────────────────────
 
-  // Restore localStorage and reset settings to defaults
   localStorageMock.restore();
   appSettings.restoreDefaults();
 
-  console.log(
-    `\n📋 Results: ${passed} passed, ${failed} failed out of ${passed + failed} tests.`,
-  );
+  const total = passed + failed;
   if (failed === 0) {
-    console.log("🎉 All tests passed!");
+    console.log(`✅ appSettings — ${passed}/${total} Tests Passed!`);
   } else {
-    console.warn(`⚠️  ${failed} test(s) failed. See above for details.`);
+    console.warn(
+      `⚠️  appSettings — ${passed}/${total} passed, ${failed} failed. See above for details.`,
+    );
   }
+
+  // Restore console.warn after tests
+  console.warn = originalWarn;
 }
 
 export default settingsTests;

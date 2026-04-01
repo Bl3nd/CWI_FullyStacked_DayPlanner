@@ -118,11 +118,7 @@ const StorageManager = {
         return CalendarViews.Week;
       case "month":
         return CalendarViews.Month;
-      // Should log 'is undefined' unless an invalid value was saved
       default:
-        console.log(
-          `Saved CalendarView is ${view}, loading day view by default.`,
-        );
         return CalendarViews.Day;
     }
   },

@@ -54,7 +54,7 @@ class AppState {
 
     // Set date view to current date in "YYYY-MM-DD" format
     this._dateView = new Date().toLocaleDateString("en-CA");
-    console.log(this._dateView);
+
     // Load calendar view from storage, default to "day" if not saved
     this._calendarView = StorageManager.loadCalendarView();
   }

@@ -4,7 +4,6 @@ function eventTests() {
   let passed = 0;
   let failed = 0;
 
-  // Helper: expects the constructor to THROW
   function expectFailure(label, options) {
     try {
       new CalendarEvent(options);
@@ -13,16 +12,13 @@ function eventTests() {
       );
       failed++;
     } catch (e) {
-      console.log(`✅ PASS — "${label}": Correctly threw → ${e.message}`);
       passed++;
     }
   }
 
-  // Helper: expects the constructor to SUCCEED
   function expectSuccess(label, options) {
     try {
       const event = new CalendarEvent(options);
-      console.log(`✅ PASS — "${label}": Event created successfully.`, event);
       passed++;
     } catch (e) {
       console.error(`❌ FAIL — "${label}": Unexpected error → ${e.message}`);
@@ -30,14 +26,10 @@ function eventTests() {
     }
   }
 
-  // Helper for length checks since we're asserting a value, not pass/fail
   function expectLength(label, options, expectedLength) {
     try {
       const event = new CalendarEvent(options);
       if (event.length === expectedLength) {
-        console.log(
-          `✅ PASS — "${label}": length is ${expectedLength} minutes.`,
-        );
         passed++;
       } else {
         console.error(
@@ -51,9 +43,9 @@ function eventTests() {
     }
   }
 
-  // ─── MISSING REQUIRED FIELDS ─────────────────────────────────────────────────
+  console.log("🧪 Testing CalendarEvent...");
 
-  console.group("Missing required fields");
+  // ─── MISSING REQUIRED FIELDS ─────────────────────────────────────────────────
   expectFailure("Missing date", {
     timeStart: "09:00",
     timeEnd: "10:00",
@@ -86,11 +78,8 @@ function eventTests() {
     timeEnd: "10:00",
     title: "",
   });
-  console.groupEnd();
 
   // ─── INVALID DATE FORMAT ──────────────────────────────────────────────────────
-
-  console.group("Invalid date format");
   expectFailure("Date before year 2000", {
     date: "1999-01-01",
     timeStart: "09:00",
@@ -145,11 +134,8 @@ function eventTests() {
     timeEnd: "10:00",
     title: "Meeting",
   });
-  console.groupEnd();
 
   // ─── INVALID TIME FORMAT ──────────────────────────────────────────────────────
-
-  console.group("Invalid time format");
   expectFailure("Time in 12-hour AM format", {
     date: "2025-03-01",
     timeStart: "9:00 AM",
@@ -180,11 +166,8 @@ function eventTests() {
     timeEnd: "10:00",
     title: "Meeting",
   });
-  console.groupEnd();
 
   // ─── INVALID TIME INCREMENTS ──────────────────────────────────────────────────
-
-  console.group("Invalid time increments (must be 00, 15, 30, 45)");
   expectFailure("timeStart minutes = 10", {
     date: "2025-03-01",
     timeStart: "09:10",
@@ -203,11 +186,8 @@ function eventTests() {
     timeEnd: "10:20",
     title: "Meeting",
   });
-  console.groupEnd();
 
   // ─── INVALID TIME ORDER ───────────────────────────────────────────────────────
-
-  console.group("Invalid time order");
   expectFailure("timeEnd before timeStart", {
     date: "2025-03-01",
     timeStart: "10:00",
@@ -226,11 +206,8 @@ function eventTests() {
     timeEnd: "09:00",
     title: "Meeting",
   });
-  console.groupEnd();
 
   // ─── INVALID PROPERTY TYPES ───────────────────────────────────────────────────
-
-  console.group("Invalid property types");
   expectFailure("title is a number", {
     date: "2025-03-01",
     timeStart: "09:00",
@@ -272,11 +249,8 @@ function eventTests() {
     title: "Lunch",
     color: "rgb(pancakes,255,255)",
   });
-  console.groupEnd();
 
   // ─── VALID CONSTRUCTIONS ──────────────────────────────────────────────────────
-
-  console.group("Valid Event constructions");
   expectSuccess("Minimum required fields", {
     date: "2025-03-01",
     timeStart: "09:00",
@@ -331,12 +305,8 @@ function eventTests() {
     title: "Dinner",
     color: "rgb(280,280,300)",
   });
-  console.groupEnd();
 
   // ─── LENGTH GETTER ────────────────────────────────────────────────────────────
-
-  console.group("Length getter");
-
   expectLength(
     "1 hour event",
     {
@@ -398,17 +368,14 @@ function eventTests() {
     45,
   );
 
-  console.groupEnd();
-
   // ─── SUMMARY ─────────────────────────────────────────────────────────────────
-
-  console.log(
-    `\n📋 Results: ${passed} passed, ${failed} failed out of ${passed + failed} tests.`,
-  );
+  const total = passed + failed;
   if (failed === 0) {
-    console.log("🎉 All tests passed!");
+    console.log(`✅ CalendarEvent — ${passed}/${total} Tests Passed!`);
   } else {
-    console.warn(`⚠️  ${failed} test(s) failed. See above for details.`);
+    console.warn(
+      `⚠️  CalendarEvent — ${passed}/${total} passed, ${failed} failed. See above for details.`,
+    );
   }
 }
 

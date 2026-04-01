@@ -28,4 +28,14 @@ initializeCalendarUI();
 initTodayButton();
 loadWeatherDisplay();
 
-// runTests();
+/* 
+This checks that "--mode development" was passed to the webpack CLI, which sets process.env.NODE_ENV to "development". 
+
+If we are in development mode, we run the tests. 
+
+This allows us to run tests during development without affecting the production build, since the test code will be ignored in production mode due to the DefinePlugin configuration in webpack.config.js. 
+*/
+if (process.env.NODE_ENV !== "production") {
+  console.info("Running in development mode, executing tests...");
+  runTests();
+}
