@@ -10,7 +10,8 @@ import appState from "./appState";
 // TODO: Add non null verification/exception handling
 
 // Root element container for event form component
-const eventFormRootElement: HTMLElement | null = document.getElementById("eventFormRoot");
+const eventFormRootElement: HTMLElement | null =
+  document.getElementById("eventFormRoot");
 
 //edit state variable
 let editingEventUID: string | null = null;
@@ -19,8 +20,11 @@ let editingEventUID: string | null = null;
  * Initializes the event manager by setting up event listener for the "Add Event" button.
  */
 function initializeEventManager(): void {
-  const addEventButton: HTMLElement | null = document.getElementById("addEventButton");
-  const calendarEventsLayer: HTMLElement | null = document.getElementById("calendarEventsLayer");
+  const addEventButton: HTMLElement | null =
+    document.getElementById("addEventButton");
+  const calendarEventsLayer: HTMLElement | null = document.getElementById(
+    "calendarEventsLayer",
+  );
 
   addEventButton?.addEventListener("click", () => {
     showEventManager();
@@ -29,7 +33,9 @@ function initializeEventManager(): void {
   //additional listener for 'edit event' option.  Reads clicks on event targets and stores eventUID then runs openEventEditor() based on eventUID.
 
   calendarEventsLayer?.addEventListener("click", (event) => {
-    const clickedEventButton: HTMLElement = (event.currentTarget as HTMLElement).closest("[data-event-id]")!;
+    const clickedEventButton: HTMLElement = (
+      event.currentTarget as HTMLElement
+    ).closest("[data-event-id]")!;
 
     if (!clickedEventButton) {
       return;
@@ -48,9 +54,14 @@ function initializeEventManager(): void {
 function showEventManager(UID: string | null = null): void {
   const eventFormRoot: Root | null = createRoot(eventFormRootElement!);
   eventFormRoot.render(
-    <EventForm UID={UID} onCancel={close} onSubmit={submit} onDelete={deleteEvent} />,
+    <EventForm
+      UID={UID}
+      onCancel={close}
+      onSubmit={submit}
+      onDelete={deleteEvent}
+    />,
   );
-  
+
   function close() {
     eventFormRoot!.unmount();
   }
@@ -61,19 +72,26 @@ function showEventManager(UID: string | null = null): void {
   }
 
   function deleteEvent() {
-    StorageManager.deleteEvent(UID!);
-    calenderEventRefresh();
+    appState.removeEvent(UID!);
+    renderCalendarView(
+      appState.allEventsByDate,
+      appState.dateViewObject,
+      appState.calendarView,
+    );
     close();
   }
 }
 
-/** 
- * Handle form submission for creating a new calendar event.
- * Extracts data from the form, performs data validation, creates a CalendarEvent object, and assigns it a unique identifier (UID).
- * Uses StorageManager to store the event in localStorage
+/**
+ * Handle form submission for creating or editing a calendar event.
+ * Extracts data from the form, performs data validation, creates a CalendarEvent object, and assigns it a unique identifier (UID) if it does not have one already.
+ * Uses appState to store the event.
  * @param {HTMLFormElement} event - The form element containing event details
  */
-function submitEvent(event: React.SubmitEvent<HTMLFormElement>, UID: String | null): void {
+function submitEvent(
+  event: React.SubmitEvent<HTMLFormElement>,
+  UID: string | null,
+): void {
   event.preventDefault();
   // Pull form from the event
   const eventForm: HTMLFormElement = event.currentTarget;
@@ -87,10 +105,13 @@ function submitEvent(event: React.SubmitEvent<HTMLFormElement>, UID: String | nu
   }
   // Generate and assign UID if not provided, save event, and hide the event creation form
   eventProps.UID = UID ?? generateUID();
-  console.log("after" + eventProps.UID);
   const newEvent = new CalendarEvent(eventProps);
   appState.addEvent(newEvent);
-  calenderEventRefresh();
+  renderCalendarView(
+    appState.allEventsByDate,
+    appState.dateViewObject,
+    appState.calendarView,
+  );
   console.log("Event saved (UID: " + eventProps.UID + ")");
   console.log(newEvent);
 }
@@ -103,10 +124,16 @@ function submitEvent(event: React.SubmitEvent<HTMLFormElement>, UID: String | nu
  * @returns {boolean} True if the event is valid, false otherwise
  */
 function validateEventSubmission(event: CalendarEvent): boolean {
-// Form input references
-const eventTitleInput: HTMLInputElement | null = document.getElementById("eventTitle") as HTMLInputElement;
-const endTimeInput: HTMLInputElement | null = document.getElementById("eventEndTime") as HTMLInputElement;
-const eventDateInput: HTMLInputElement | null = document.getElementById("eventDate") as HTMLInputElement;
+  // Form input references
+  const eventTitleInput: HTMLInputElement | null = document.getElementById(
+    "eventTitle",
+  ) as HTMLInputElement;
+  const endTimeInput: HTMLInputElement | null = document.getElementById(
+    "eventEndTime",
+  ) as HTMLInputElement;
+  const eventDateInput: HTMLInputElement | null = document.getElementById(
+    "eventDate",
+  ) as HTMLInputElement;
 
   // Title validation
   if (event.title.trim() === "" || event.title.length > 100) {
@@ -161,18 +188,4 @@ const eventDateInput: HTMLInputElement | null = document.getElementById("eventDa
   return true;
 }
 
-/**
- * re-render events displayed after adding, editing, or deleting an event
- */
-function calenderEventRefresh(): void {
-  const headerDateContainer: HTMLElement | null = document.getElementById("headerDateContainer");
-  const headerDateText = headerDateContainer?.textContent;
-  const headerDateRender = new Date(headerDateText!);
-  const allEvents = Array.from(appState.allEventsByUID);
-  renderCalendarView(allEvents, headerDateRender, "day");
-}
-
-export {
-  initializeEventManager,
-  showEventManager,
-};
+export { initializeEventManager, showEventManager };
