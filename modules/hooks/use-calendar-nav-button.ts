@@ -32,6 +32,11 @@ export function useCalendarNavButtonHandler(
 export function applyCalendarNavigation(navDirection: number): void {
   const currentDate = appState.dateViewObject;
 
+  // Check that the navigation direction is valid.
+  if (navDirection !== 1 && navDirection !== -1) {
+    throw new Error("Invalid navigation direction. Must be 1 or -1.");
+  }
+
   // Read view mode at click time so Day/Week/Month toggles apply even if this subtree was not re-rendered.
   switch (appState.calendarView) {
     case CalendarViews.Day:
