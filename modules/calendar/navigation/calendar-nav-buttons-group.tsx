@@ -1,3 +1,4 @@
+import { useNavigateWithArrows } from "../../hooks/use-navigate-with-arrows";
 import CalendarNavButton from "../navigation/calendar-nav-button";
 
 type CalendarNavButtonsGroupProps = {
@@ -12,6 +13,9 @@ type CalendarNavButtonsGroupProps = {
 function CalendarNavButtonsGroup({
   onAfterNavigate,
 }: CalendarNavButtonsGroupProps) {
+  // Use the custom hook to navigate the calendar with the arrows.
+  useNavigateWithArrows(() => onAfterNavigate());
+
   return (
     <>
       {/* Go to previous day/week/month */}
