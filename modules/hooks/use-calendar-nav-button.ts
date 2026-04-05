@@ -25,8 +25,11 @@ export function useCalendarNavButtonHandler(
   );
 }
 
-// Calculates and applies the new date to the `appState.dateView` based on the navigation direction and current view.
-function applyCalendarNavigation(navDirection: number): void {
+/**
+ * Calculates and applies the new date to the `appState.dateView` based on the navigation direction and current view.
+ * @param navDirection - The direction to navigate the calendar.
+ */
+export function applyCalendarNavigation(navDirection: number): void {
   const currentDate = appState.dateViewObject;
 
   // Check that the navigation direction is valid.
