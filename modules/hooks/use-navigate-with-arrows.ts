@@ -20,7 +20,7 @@ export const useNavigateWithArrows = (onAfterRender: () => void) => {
       // If the key is not an arrow key, return.
       if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
       // If the target is not a regular HTML element, return.
-      if (shouldNotAllowKeyNav(event.target)) return;
+      if (isEditableControlTarget(event.target)) return;
       // Prevent the default behavior of the event.
       event.preventDefault();
       // Call the useEffectEvent hook that will handle the navigation.
@@ -32,7 +32,7 @@ export const useNavigateWithArrows = (onAfterRender: () => void) => {
   }, []);
 };
 
-function shouldNotAllowKeyNav(target: EventTarget | null): boolean {
+function isEditableControlTarget(target: EventTarget | null): boolean {
   // If the target is not a regular HTML element, return false.
   if (!(target instanceof HTMLElement)) return false;
 
