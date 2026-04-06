@@ -8,9 +8,8 @@
 }
 
 #eventPopupContainer {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, .4);
   place-items: center;
-  z-index: 50;
   position: fixed;
   height: 100%;
   width: 100%;
