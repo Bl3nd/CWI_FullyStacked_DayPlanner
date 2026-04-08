@@ -1,19 +1,20 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+html,
+body {
+  height: 100%;
 }
 
 body {
-  padding: 0 1%;
+  padding-inline: 0.5rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+
+  @media (min-width: 768px) {
+    padding-inline: 1rem;
+  }
 }
 
-div {
-  border: 1px solid black;
-  border-radius: 0.5rem;
+:root {
+  --bottom-nav-height: 3.25rem;
 }
 
 #appHeader {
@@ -40,7 +41,6 @@ div {
 }
 
 #headerDateContainer {
-  border: none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +48,6 @@ div {
 }
 
 #headerWeatherContainer #weatherDisplay {
-  border: none;
   padding: 0 0.1rem;
 }
 
@@ -84,7 +83,6 @@ div {
   justify-content: center;
   gap: 1rem;
   padding: 0.25rem;
-  border: none;
 }
 
 #calendarNavButton-next img,
