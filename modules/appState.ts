@@ -42,10 +42,13 @@ function mapEventsByDate(
 }
 
 class AppState {
-  private _eventsByUID: Map<string, CalendarEvent>;
-  private _eventsByDate: Map<string, CalendarEvent[]>;
-  private _calendarView: CalendarViews;
-  private _dateView: string;
+  private _loadedEvents = StorageManager.loadAllEvents();
+
+  private _eventsByUID = mapEventsByUID(this._loadedEvents);
+  private _eventsByDate = mapEventsByDate(this._loadedEvents);
+  private _dateView = new Date().toLocaleDateString("en-CA");
+
+  private _calendarView = StorageManager.loadCalendarView();
 
   // Set of listener functions to call whenever the app state changes (e.g. when events are added, edited, or deleted)
   private listeners = new Set<() => void>();
@@ -264,9 +267,9 @@ class AppState {
 
   private buildSnapshot() {
     return {
-      allEventsByDate: this.allEventsByDate,
-      calendarView: this.calendarView,
-      dateView: this.dateView,
+      allEventsByDate: this._eventsByDate,
+      calendarView: this._calendarView,
+      dateView: this._dateView,
     };
   }
 }
