@@ -1,8 +1,10 @@
+import { showEventManager } from "../../eventManager";
 import { useNavigateWithArrows } from "../../hooks/use-navigate-with-arrows";
 import CalendarNavButton from "../navigation/calendar-nav-button";
 
 type CalendarNavButtonsGroupProps = {
   onAfterNavigate: () => void;
+  
 };
 
 /**
@@ -25,6 +27,13 @@ function CalendarNavButtonsGroup({
       >
         <img src="./assets/icons/chevron-left.svg" />
       </CalendarNavButton>
+      <button
+        id="addEventButton"
+        className="btn btn-sm btn-primary d-flex justify-content-center align-items-center"
+        onClick={() => showEventManager()}
+      >
+        <img src="./assets/icons/plus.svg" />
+      </button>
       {/* Go to next day/week/month */}
       <CalendarNavButton directionType="next" onAfterNavigate={onAfterNavigate}>
         <img src="./assets/icons/chevron-right.svg" />

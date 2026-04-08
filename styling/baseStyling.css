@@ -69,11 +69,12 @@ body {
 }
 
 #calendarActionButtonsContainer {
+  position: static;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  height: 10vh;
+  height: 5vh;
   width: 100%;
   gap: 0.5rem;
 }
@@ -81,19 +82,19 @@ body {
 #calendarNavButtonsContainer {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  padding: 0.25rem;
+  gap: 1.5rem;
 }
 
 #calendarNavButton-next img,
-#calendarNavButton-previous img {
+#calendarNavButton-previous img,
+#addEventButton img {
   filter: invert(1);
   width: 1rem;
   height: 1.0625rem;
 }
 
 #addEventButton {
-  width: 6rem;
+  width: 4rem;
 }
 
 .clickedEventPopup {

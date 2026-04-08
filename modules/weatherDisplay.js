@@ -1,5 +1,5 @@
 import { weatherKey } from "./weatherKey";
-import appSettings from "./settings";
+import appSettings from "./appSettings";
 
 // weather api key
 const API_KEY = weatherKey.key;

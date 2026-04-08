@@ -5,6 +5,8 @@ type CalendarDisplayButtonsGroupProps = {
   activeView: CalendarViews;
   // A function to call when a button is clicked. The parent gets to decide what to do within this function.
   onSelectView: (view: CalendarViews) => void;
+  // A Function for when todayButton is clicked.
+  onSelectToday: () => void;
 };
 
 /**
@@ -16,6 +18,7 @@ type CalendarDisplayButtonsGroupProps = {
 function CalendarDisplayButtonsGroup({
   activeView,
   onSelectView,
+  onSelectToday,
 }: CalendarDisplayButtonsGroupProps) {
   return (
     <>
@@ -37,6 +40,15 @@ function CalendarDisplayButtonsGroup({
         isActive={activeView === CalendarViews.Month}
         onClick={() => onSelectView(CalendarViews.Month)}
       />
+      {/*Today Button.  Forces dayView and current Day
+      I added a new button instead of making large alterations to calendar-display-button.tsx so as not to step on cody's code.*/}
+      <button
+        type="button"
+        className="btn btn-sm btn-secondary"
+        onClick={onSelectToday}
+      >
+        Today
+      </button>
     </>
   );
 }

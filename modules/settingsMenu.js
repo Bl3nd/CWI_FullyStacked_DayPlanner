@@ -1,6 +1,6 @@
 import "../styling/settingsMenu.css";
 
-import appSettings from "./settings";
+import appSettings from "./appSettings";
 
 // Icons for menuItems
 import moonIcon from "../assets/icons/moon.svg";

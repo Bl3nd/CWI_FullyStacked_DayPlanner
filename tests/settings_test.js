@@ -1,6 +1,6 @@
 import localStorageMock from "./mockStorage";
 
-import appSettings from "../modules/settings";
+import appSettings from "../modules/appSettings";
 
 function settingsTests() {
   let passed = 0;

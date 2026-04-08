@@ -79,7 +79,7 @@ const appSettings = {
     } else {
       tempUnit = "Fahrenheit";
     }
-    
+
     // Reload weather display after changing temperature unit
     loadWeatherDisplay();
   },
