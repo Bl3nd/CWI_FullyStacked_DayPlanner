@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from "react";
 import CalendarEvent from "./classCalendarEvent";
 import StorageManager from "./dataStorage";
 import { CalendarViews } from "./enumCalendarViews";
@@ -41,10 +42,16 @@ function mapEventsByDate(
 }
 
 class AppState {
-  private _eventsByUID: Map<string, CalendarEvent>;
-  private _eventsByDate: Map<string, CalendarEvent[]>;
-  private _calendarView: CalendarViews;
-  private _dateView: string;
+  private _loadedEvents = StorageManager.loadAllEvents();
+
+  private _eventsByUID = mapEventsByUID(this._loadedEvents);
+  private _eventsByDate = mapEventsByDate(this._loadedEvents);
+  private _dateView = new Date().toLocaleDateString("en-CA");
+
+  private _calendarView = StorageManager.loadCalendarView();
+
+  // Set of listener functions to call whenever the app state changes (e.g. when events are added, edited, or deleted)
+  private listeners = new Set<() => void>();
 
   constructor() {
     const loadedEvents = StorageManager.loadAllEvents();
@@ -106,17 +113,27 @@ class AppState {
    * @param event CalendarEvent object to add
    */
   addEvent(event: CalendarEvent): void {
-    this._eventsByUID.set(event.UID, event);
+    // Replace map instead of mutating
+    this._eventsByUID = new Map(this._eventsByUID).set(event.UID, event);
 
-    const dateKey = event.date;
-    if (!this._eventsByDate.has(dateKey)) {
-      this._eventsByDate.set(dateKey, []);
-    }
-    // @ts-ignore - TypeScript thinks this._eventsByDate.get(dateKey) could be undefined,
-    // but we just ensured it exists, so go home TypeScript, you're drunk
-    this._eventsByDate.get(dateKey).push(event);
+    // Check if an event with the same UID already exists for that date
+    const existingEvents = this._eventsByDate.get(event.date) ?? [];
+    const alreadyExists = existingEvents.some((e) => e.UID === event.UID);
+
+    // If it already exists, replace the existing event with the new event in the array of events for that date.
+    // If it doesn't already exist, add the new event to the array of events for that date.
+    const updatedEvents = alreadyExists
+      ? existingEvents.map((e) => (e.UID === event.UID ? event : e))
+      : [...existingEvents, event];
+
+    // Replace map instead of mutating
+    this._eventsByDate = new Map(this._eventsByDate).set(
+      event.date,
+      updatedEvents,
+    );
 
     StorageManager.saveEvent(event);
+    this.notifyListeners();
   }
 
   /**
@@ -128,26 +145,27 @@ class AppState {
    */
   removeEvent(uid: string): void {
     const event = this._eventsByUID.get(uid);
-    if (!event) {
-      throw new Error(`Event with UID ${uid} does not exist.`);
-    }
+    if (!event) throw new Error(`No event found with UID: ${uid}`);
 
+    // Replace map instead of mutating
+    this._eventsByUID = new Map(this._eventsByUID);
     this._eventsByUID.delete(uid);
 
-    const dateKey = event.date;
-    const eventsForDate = this._eventsByDate.get(dateKey);
-    if (eventsForDate) {
-      // Remove the event with the specified UID from the array of events for that date.
-      // If there are no other events remaining for that date,
-      // remove the date key from the map entirely
-      const updatedEvents = eventsForDate.filter((e) => e.UID !== uid);
-      if (updatedEvents.length > 0) {
-        this._eventsByDate.set(dateKey, updatedEvents);
-      } else {
-        this._eventsByDate.delete(dateKey);
-      }
+    // Remove the event from the array of events for that date
+    const remainingEvents = (this._eventsByDate.get(event.date) ?? []).filter(
+      (e) => e.UID !== uid,
+    );
+
+    this._eventsByDate = new Map(this._eventsByDate);
+
+    if (remainingEvents.length === 0) {
+      this._eventsByDate.delete(event.date);
+    } else {
+      this._eventsByDate.set(event.date, remainingEvents);
     }
+
     StorageManager.deleteEvent(uid);
+    this.notifyListeners();
   }
 
   /**
@@ -173,6 +191,7 @@ class AppState {
     }
     this._calendarView = view;
     StorageManager.saveCalendarView(view);
+    this.notifyListeners();
   }
 
   /**
@@ -207,27 +226,65 @@ class AppState {
       );
     }
     this._dateView = date;
+    this.notifyListeners();
+  }
+
+  /**
+   * Allows components to subscribe to changes in the app state.
+   * Whenever the app state changes, all subscribed listener functions will be called
+   * so that they can update their UI accordingly.
+   *
+   * Returns an unsubscribe function that React uses when the component unmounts.
+   */
+  subscribe(listener: () => void) {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  /**
+   * Calls all subscribed listener functions to notify them that the app state has changed.
+   * Passes a snapshot of the current app state to each listener so React can update the UI accordingly.
+   * This replaces extra calls to rerender elsewhere in the code.
+   */
+  private notifyListeners() {
+    this.snapshot = this.buildSnapshot();
+    this.listeners.forEach((listener) => listener());
+  }
+
+  /**
+   * Snapshot of the current app state that is passed to subscribed listener functions whenever the app state changes.
+   * This is how React decides if a component needs to rerender - if the snapshot has changed
+   * since the last time it was called, then the component will rerender with the new snapshot data.
+   * @returns
+   */
+  getSnapshot() {
+    return this.snapshot;
+  }
+
+  private snapshot = this.buildSnapshot();
+
+  private buildSnapshot() {
+    return {
+      allEventsByDate: this._eventsByDate,
+      calendarView: this._calendarView,
+      dateView: this._dateView,
+    };
   }
 }
 
 /**
  * Single source of truth for all event data and calendar state in the app.
  *
+ * Components can subscribe to changes in the app state and receive a snapshot of the current state
+ * whenever it changes, allowing them to update their UI accordingly.
+ *
  * Provides methods to access and manipulate events, calendar view, and date view.
  * Initially loads events and calendar view from localStorage into eventsByUID and eventsByDate maps,
- * and sets date view to current date.
+ * and sets date view to current date. When events are added, edited, or deleted,
+ * creates new, updated internal maps and saves changes to localStorage.
  *
- * When events are added, edited, or deleted, updates the internal maps and saves changes to localStorage.
  * When calendar view is changed, saves the new view to localStorage.
  *
- * allEventsByUID()
- * getEventByUID("uid")
- * allEventsByDate()
- * getEventsByDate("YYYY-MM-DD")
- * addEvent(event)
- * removeEvent("uid")
- * calendarView (getter/setter) "day" | "week" | "month"
- * dateView (getter/setter) "YYYY-MM-DD" string
  */
 const appState = new AppState();
 
@@ -237,5 +294,18 @@ registerCheatCode(() => {
   const events = createMockEvents();
   events.forEach((event) => appState.addEvent(event));
 });
+
+/**
+ * Function that React components can import and call to subscribe to changes in the app state.
+ * Whenever the app state changes, the subscribed component will receive a new snapshot
+ * of the app state and can update its UI if needed. *
+ */
+
+export function useAppStateStore() {
+  return useSyncExternalStore(
+    (listener) => appState.subscribe(listener),
+    () => appState.getSnapshot(),
+  );
+}
 
 export default appState;

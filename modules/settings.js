@@ -1,5 +1,7 @@
 // Remember to change the restoreDefaults() method and testSuite() if you change any of these default values
 
+import { loadWeatherDisplay } from "./weatherDisplay";
+
 let lightMode = "light";
 const lightModeOptions = ["light", "dark"];
 
@@ -77,6 +79,9 @@ const appSettings = {
     } else {
       tempUnit = "Fahrenheit";
     }
+    
+    // Reload weather display after changing temperature unit
+    loadWeatherDisplay();
   },
   //
   // Color theme

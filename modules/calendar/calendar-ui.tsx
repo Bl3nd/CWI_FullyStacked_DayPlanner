@@ -28,8 +28,6 @@ function renderCalendar(): void {
     appState.dateViewObject,
     appState.calendarView,
   );
-
-  renderCalendarHeaderDisplay();
 }
 
 // Render the calendary view button group that includes the 'Day', 'Week', 'Month' buttons
@@ -84,26 +82,13 @@ function renderCalendarNavigationButtons(): void {
   }
 }
 
-// Render the calendar header display (the current date being viewed).
-let headerDateContainerRoot: Root | null = null;
-function renderCalendarHeaderDisplay(): void {
-  // Get the root element for the calendar header display.
-  const headerDateContainer = document.getElementById("headerDateContainer");
-  if (headerDateContainer) {
-    // If the root element exists, create a root for the calendar header display.
-    // Create a root for the calendar header display.
-    if (headerDateContainerRoot === null) {
-      headerDateContainerRoot = createRoot(headerDateContainer); // Create a root for the calendar header display if it doesn't exist. This is to prevent the root from being created multiple times.
-    }
+// Create React root for the calendar header date display
+const headerDateRoot = createRoot(
+  document.getElementById("headerDateContainer")!,
+);
 
-    // Function to render the calendar header display using the react components.
-    const renderHeaderDateDisplay = () => {
-      // We know that the root does exist at this point.
-      headerDateContainerRoot!.render(<CalendarHeaderDisplay />);
-    };
-
-    renderHeaderDateDisplay(); // Automatically call the render function.
-  }
-}
+// One render call to initialize and then useAppStateStore will
+// update it automatically when the dateView changes.
+headerDateRoot.render(<CalendarHeaderDisplay />);
 
 export { initializeCalendarUI };
