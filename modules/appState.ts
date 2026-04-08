@@ -113,27 +113,25 @@ class AppState {
    * @param event CalendarEvent object to add
    */
   addEvent(event: CalendarEvent): void {
-    this._eventsByUID.set(event.UID, event);
+    // Replace map instead of mutating
+    this._eventsByUID = new Map(this._eventsByUID).set(event.UID, event);
 
-    const dateKey = event.date;
-    if (!this._eventsByDate.has(dateKey)) {
-      this._eventsByDate.set(dateKey, []);
-    }
+    // Check if an event with the same UID already exists for that date
+    const existingEvents = this._eventsByDate.get(event.date) ?? [];
+    const alreadyExists = existingEvents.some((e) => e.UID === event.UID);
 
-    // @ts-ignore - TypeScript thinks this._eventsByDate.get(dateKey) could be undefined,
-    // but we just ensured it exists, so go home TypeScript, you're drunk
-    if (this._eventsByDate.get(dateKey).some((e) => e.UID === event.UID)) {
-      // @ts-ignore
-      // If an event with the same UID already exists for this date, replace it in the array
-      const updatedEvents = this._eventsByDate
-        .get(dateKey)
-        .map((e) => (e.UID === event.UID ? event : e));
-      this._eventsByDate.set(dateKey, updatedEvents);
-    } else {
-      // @ts-ignore
-      // Otherwise add the new event to the array for this date
-      this._eventsByDate.get(dateKey).push(event);
-    }
+    // If it already exists, replace the existing event with the new event in the array of events for that date.
+    // If it doesn't already exist, add the new event to the array of events for that date.
+    const updatedEvents = alreadyExists
+      ? existingEvents.map((e) => (e.UID === event.UID ? event : e))
+      : [...existingEvents, event];
+
+    // Replace map instead of mutating
+    this._eventsByDate = new Map(this._eventsByDate).set(
+      event.date,
+      updatedEvents,
+    );
+
     StorageManager.saveEvent(event);
     this.notifyListeners();
   }
@@ -147,25 +145,25 @@ class AppState {
    */
   removeEvent(uid: string): void {
     const event = this._eventsByUID.get(uid);
-    if (!event) {
-      throw new Error(`Event with UID ${uid} does not exist.`);
-    }
+    if (!event) throw new Error(`No event found with UID: ${uid}`);
 
+    // Replace map instead of mutating
+    this._eventsByUID = new Map(this._eventsByUID);
     this._eventsByUID.delete(uid);
 
-    const dateKey = event.date;
-    const eventsForDate = this._eventsByDate.get(dateKey);
-    if (eventsForDate) {
-      // Remove the event with the specified UID from the array of events for that date.
-      // If there are no other events remaining for that date,
-      // remove the date key from the map entirely
-      const updatedEvents = eventsForDate.filter((e) => e.UID !== uid);
-      if (updatedEvents.length > 0) {
-        this._eventsByDate.set(dateKey, updatedEvents);
-      } else {
-        this._eventsByDate.delete(dateKey);
-      }
+    // Remove the event from the array of events for that date
+    const remainingEvents = (this._eventsByDate.get(event.date) ?? []).filter(
+      (e) => e.UID !== uid,
+    );
+
+    this._eventsByDate = new Map(this._eventsByDate);
+
+    if (remainingEvents.length === 0) {
+      this._eventsByDate.delete(event.date);
+    } else {
+      this._eventsByDate.set(event.date, remainingEvents);
     }
+
     StorageManager.deleteEvent(uid);
     this.notifyListeners();
   }
@@ -277,21 +275,16 @@ class AppState {
 /**
  * Single source of truth for all event data and calendar state in the app.
  *
+ * Components can subscribe to changes in the app state and receive a snapshot of the current state
+ * whenever it changes, allowing them to update their UI accordingly.
+ *
  * Provides methods to access and manipulate events, calendar view, and date view.
  * Initially loads events and calendar view from localStorage into eventsByUID and eventsByDate maps,
- * and sets date view to current date.
+ * and sets date view to current date. When events are added, edited, or deleted,
+ * creates new, updated internal maps and saves changes to localStorage.
  *
- * When events are added, edited, or deleted, updates the internal maps and saves changes to localStorage.
  * When calendar view is changed, saves the new view to localStorage.
  *
- * allEventsByUID()
- * getEventByUID("uid")
- * allEventsByDate()
- * getEventsByDate("YYYY-MM-DD")
- * addEvent(event)
- * removeEvent("uid")
- * calendarView (getter/setter) "day" | "week" | "month"
- * dateView (getter/setter) "YYYY-MM-DD" string
  */
 const appState = new AppState();
 
