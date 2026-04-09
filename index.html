@@ -80,10 +80,22 @@
     <!-- Container for navigation and new event buttons -->
     <!-- 10% of screen height -->
     <!--  -->
-    <div id="calendarActionButtonsContainer">
-      <div id="calendarNavButtonsContainer"></div>
-    </div>
-    <div id="eventFormRoot">
-    </div>
+    <footer class="border-top w-100 position-fixed bottom-0">
+      <div
+        class="position-relative d-flex justify-content-center align-items-center px-4 py-3"
+      >
+        <div
+          id="calendarNavButtonsContainer"
+          class="d-flex justify-content-center align-items-center gap-4"
+        ></div>
+        <button class="position-absolute end-0 me-4 btn btn-sm">
+          <img
+            src="./assets/icons/calendar-cog.svg"
+            class="calendarSettingsIcon"
+          />
+        </button>
+      </div>
+    </footer>
+    <div id="eventFormRoot"></div>
   </body>
 </html>
