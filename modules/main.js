@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../styling/baseStyling.css";
 import "../styling/calendar.css";
 import "../styling/dayCalendar.css";

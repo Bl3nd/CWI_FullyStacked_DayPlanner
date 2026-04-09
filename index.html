@@ -21,11 +21,6 @@
           </div>
         </div>
       </div>
-      <!-- Holds the buttons that swap calendar view between Day, Week, Month -->
-      <div id="displayButtonsContainer">
-        <!-- If we refactor the today button, we can switch out the 'calendarDisplayButtonsRoot' for the 'displayButtonsContainer' -->
-        <div id="calendarDisplayButtonsRoot"></div> 
-       </div>
     </header>
 
     <!--  -->
@@ -66,21 +61,19 @@
       </div>
     </div>
 
-    <!--  -->
-  </div>
-  <!--Event Popup-->
-  <div id="clickedEventPopup" class="clickedEventPopup">
-    <h2 id="clickedEventPopupTitle"></h2>
-    <p id="clickedEventPopupTime"></p>
-    <p id="clickedEventPopupAddress"></p>
-    <p id="clickedEventPopupDescription"></p>
-    <button type="button" id="editEventButton">Edit</button>
-  </div>
-  
+    <!--Event Popup-->
+    <div id="clickedEventPopup" class="clickedEventPopup">
+      <h2 id="clickedEventPopupTitle"></h2>
+      <p id="clickedEventPopupTime"></p>
+      <p id="clickedEventPopupAddress"></p>
+      <p id="clickedEventPopupDescription"></p>
+      <button type="button" id="editEventButton">Edit</button>
+    </div>
+
     <!-- Container for navigation and new event buttons -->
     <!-- 10% of screen height -->
     <!--  -->
-    <footer class="border-top w-100 position-fixed bottom-0">
+    <footer class="border-top w-100 position-fixed bottom-0" style="z-index: 1">
       <div
         class="position-relative d-flex justify-content-center align-items-center px-4 py-3"
       >
@@ -88,12 +81,32 @@
           id="calendarNavButtonsContainer"
           class="d-flex justify-content-center align-items-center gap-4"
         ></div>
-        <button class="position-absolute end-0 me-4 btn btn-sm">
-          <img
-            src="./assets/icons/calendar-cog.svg"
-            class="calendarSettingsIcon"
-          />
-        </button>
+
+        <!-- Calendar Settings Menu -->
+        <div class="position-absolute end-0 me-4">
+          <button
+            type="button"
+            id="calendarSettingsTrigger"
+            class="d-flex gap-1 btn btn-sm btn-primary align-items-center justify-content-center"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            title="Calendar Settings"
+          >
+            <img
+              src="./assets/icons/calendar-cog.svg"
+              alt=""
+              class="calendarSettingsIcon"
+              style="width: 1.25rem; height: 1.25rem"
+            />
+          </button>
+          <div class="dropdown-menu pt-0 pb-1">
+            <h6 class="dropdown-header -mt-2 text-center">Calendar View</h6>
+            <div
+              id="calendarDisplayButtonsRoot"
+              class="d-flex flex-column gap-1 px-1"
+            ></div>
+          </div>
+        </div>
       </div>
     </footer>
     <div id="eventFormRoot"></div>

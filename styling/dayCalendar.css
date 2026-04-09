@@ -190,19 +190,6 @@
   font-size: 0.75rem;
 }
 
-#calendarSettingsContainer {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  border: none;
-  width: fit-content;
-  z-index: 3;
-
-  @media (min-width: 768px) {
-    right: 1.25rem;
-  }
-}
-
 .durationSelectInput {
   width: 100%;
 }
