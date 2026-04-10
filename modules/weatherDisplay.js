@@ -90,10 +90,8 @@ function displayWeather(data) {
 
   // Update the display to show weather data from the API endpoint
   weatherBox.innerHTML = `
-        <p><img src="${iconUrl}" alt="Weather icon"/></p>
-        <p><strong>${city}</strong></p>
-        <p>${Math.round(temperature)}${symbol}</p>
-        <p><em>${condition}</em></p>
+        <img src="${iconUrl}" alt="Weather icon"/>
+        <span>${Math.round(temperature)} ${symbol}</span>
     `;
 }
 

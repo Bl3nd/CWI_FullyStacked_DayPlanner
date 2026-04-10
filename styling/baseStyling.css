@@ -1,6 +1,6 @@
 html,
 body {
-  height: 100%;
+  height: 100dvh;
 }
 
 body {
@@ -13,52 +13,17 @@ body {
   }
 }
 
-:root {
-  --bottom-nav-height: 3.25rem;
-}
-
-#appHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  height: 15vh;
-  width: 100%;
-}
-
-#appTitle {
-  text-align: center;
-  height: 2rem;
-}
-
-#headerInfoContainer {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-}
-
 #headerDate {
   width: 100%;
 }
 
-#headerDateContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
+#headerWeatherContainer {
+  margin-right: 2rem;
 }
 
-#headerWeatherContainer #weatherDisplay {
-  padding: 0 0.1rem;
-}
-
-#headerWeatherContainer #weatherDisplay p {
-  display: inline-block;
-  margin-right: 0.1rem;
-}
-
-#headerWeatherContainer img {
+#weatherDisplay img {
   width: 2rem;
-  vertical-align: middle;
+  height: 2rem;
 }
 
 #displayButtonsContainer {

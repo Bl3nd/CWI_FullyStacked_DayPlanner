@@ -2,8 +2,8 @@
 
 .settingsMenuButton {
   position: absolute;
-  top: 0.25rem;
-  right: 1%;
+  top: 0.875rem;
+  right: 1rem;
   z-index: 21;
 
   background-image: url("../assets/icons/menu.svg");
@@ -11,8 +11,12 @@
   background-position: center;
   background-size: cover;
 
-  height: 2rem;
-  width: 2rem;
+  height: 1.5rem;
+  width: 1.5rem;
+
+  @media (min-width: 1024px) {
+    right: 1.25rem;
+  }
 
   border: none;
 }
