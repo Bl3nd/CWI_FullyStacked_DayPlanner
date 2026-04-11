@@ -1,13 +1,15 @@
 #calendarContainer {
-  height: calc(100dvh - 6.75rem);
+  flex: 1 1 0;
+  min-height: 0;
 }
 
 #calendarViewArea {
+  flex: 1 1 0;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
-  scroll-margin-inline: 10rem;
 }
 
 #calendarViewArea .calendarDayContent,

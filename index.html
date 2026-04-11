@@ -21,37 +21,36 @@
     <!-- Main container that will hold calendar view and events -->
     <!-- 75% of screen height -->
     <!--  -->
-    <div id="calendarContainer" class="d-flex flex-column px-2 py-1">
-      <div id="calendarSettingsContainer">
-        <select id="slotDurationSelect" name="slotDuration">
-          <option value="60">1 hour</option>
-          <option value="30">30 minutes</option>
-        </select>
-      </div>
-      <div id="calendarViewArea" data-calendar-view="day">
-        <div id="calendarDayContentWrapper" class="calendarDayContent">
-          <div
-            id="calendarTimeLabelsColumn"
-            class="calendarTimeLabelsColumn"
-          ></div>
-          <div id="calendarDayGridColumn" class="calendarDayGridColumn">
+    <div id="mainContentContainer" class="d-flex flex-column container">
+      <div id="calendarContainer" class="d-flex flex-column px-2 py-1">
+        <div id="calendarViewArea" data-calendar-view="day">
+          <div id="calendarDayContentWrapper" class="calendarDayContent">
             <div
-              id="calendarHourGridLinesContainer"
-              class="calendarHourGridLines"
+              id="calendarTimeLabelsColumn"
+              class="calendarTimeLabelsColumn"
             ></div>
-            <div
-              id="calendarCurrentTimeLineContainer"
-              class="calendarNowLine"
-              aria-hidden="true"
-            ></div>
-            <div id="calendarEventsLayer" class="calendarEventsLayer"></div>
+            <div id="calendarDayGridColumn" class="calendarDayGridColumn">
+              <div
+                id="calendarHourGridLinesContainer"
+                class="calendarHourGridLines"
+              ></div>
+              <div
+                id="calendarCurrentTimeLineContainer"
+                class="calendarNowLine"
+                aria-hidden="true"
+              ></div>
+              <div id="calendarEventsLayer" class="calendarEventsLayer"></div>
+            </div>
           </div>
+          <div
+            id="calendarWeekContentWrapper"
+            class="calendarWeekContent"
+          ></div>
+          <div
+            id="calendarMonthContentWrapper"
+            class="calendarMonthContent"
+          ></div>
         </div>
-        <div id="calendarWeekContentWrapper" class="calendarWeekContent"></div>
-        <div
-          id="calendarMonthContentWrapper"
-          class="calendarMonthContent"
-        ></div>
       </div>
     </div>
 
@@ -76,7 +75,7 @@
     <!-- Container for navigation and new event buttons -->
     <!-- 10% of screen height -->
     <!--  -->
-    <footer class="fixed-bottom" style="z-index: 1">
+    <footer class="fixed-bottom bg-body" style="z-index: 20">
       <div
         class="position-relative d-flex justify-content-center align-items-center px-4 py-3"
       >

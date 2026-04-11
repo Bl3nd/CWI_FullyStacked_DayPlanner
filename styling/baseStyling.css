@@ -7,10 +7,17 @@ body {
   padding-inline: 0.5rem;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 
   @media (min-width: 768px) {
     padding-inline: 1rem;
   }
+}
+
+#mainContentContainer {
+  flex: 1 1 0;
+  min-height: 0;
+  padding-bottom: 3.75rem;
 }
 
 #displayButtonsContainer {
