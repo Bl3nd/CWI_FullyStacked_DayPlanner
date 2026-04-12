@@ -5,11 +5,11 @@ import DayCalendarGridColumn from "./dayCalendarGridColumn";
 import DayCalendarTimeSlotColumn from "./dayCalendarTimeSlotColumn";
 import createAllSlotsForDay from "../dailyCalendar";
 
+const SLOT_DURATION = 60;
 
 type Props = {
 	events: CalendarEvent[];
 	viewDate: Date;
-	slotDuration: number;
 };
 
 /**
@@ -23,7 +23,7 @@ type Props = {
  * - DayCalendarTimeSlotColumn - time labels on the left
  * - DayCalendarGridColumn - grid lines, current-time line, and events on the right  
  */
-export default function DayView({ events, viewDate, slotDuration }: Props) {
+export default function DayView({ events, viewDate }: Props) {
 	/**
 	 * If viewing today, calculates how many minutes have passed since midnight
 	 * Example: 9:30 AM = 570 minutes
@@ -34,10 +34,10 @@ export default function DayView({ events, viewDate, slotDuration }: Props) {
 		: null;
 
 	// Height of each time slot row in pixels.
-	const slotHeight = slotDuration * Calendar.PIXELS_PER_MINUTE;
+	const slotHeight = SLOT_DURATION * Calendar.PIXELS_PER_MINUTE;
 
 	// Array of slot start values (minutes from midnight) for the full day.
-	const slots = createAllSlotsForDay(slotDuration);
+	const slots = createAllSlotsForDay(SLOT_DURATION);
 
 	/**
 	 * Matches the old vanilla JS behavior
@@ -57,17 +57,18 @@ export default function DayView({ events, viewDate, slotDuration }: Props) {
 			block: "center",
 		});
 		}
-	}, [viewDate, slotDuration]);
+	}, [viewDate]);
 
 	return (
 		<div id="calendarDayContentWrapper" className="calendarDayContent">
 			<DayCalendarTimeSlotColumn 
 				slots={slots}
 				currentMinutesFromMidnight={currentMinutesFromMidnight}
-				slotDuration={slotDuration}
+				slotDuration={SLOT_DURATION}
 				slotHeight={slotHeight}
 			/>
 			<DayCalendarGridColumn
+				events={events}
 				slots={slots}
 				slotHeight={slotHeight}
 				currentMinutesFromMidnight={currentMinutesFromMidnight}

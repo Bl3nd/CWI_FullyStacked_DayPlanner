@@ -6,7 +6,6 @@ type Props = {
 	view: CalendarViews;
 	events: CalendarEvent[];
 	viewDate: Date;
-	slotDuration: number;
 };
 
 // Decides which calendar content to show; Day | Week | Month
@@ -14,14 +13,12 @@ export default function CalendarView({
 	view,
 	events,
 	viewDate,
-	slotDuration
 }: Props) {
 	if (view === CalendarViews.Day) {
 		return (
 			<DayView 
 				events={events}
 				viewDate={viewDate}
-				slotDuration={slotDuration}
 			/>
 		);
 	}

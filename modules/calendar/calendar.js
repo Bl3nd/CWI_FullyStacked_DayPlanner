@@ -7,7 +7,7 @@ import appState from "../appState";
 import appSettings from "../appSettings";
 
 /*
-   !!! This is the entry point for the calendar module. It is used to render the calendar view based on the calendar view type.
+  !!! This is the entry point for the calendar module. It is used to render the calendar view based on the calendar view type.
 */
 
 export const CalendarView = {
@@ -50,7 +50,7 @@ export function renderCalendarView(
 
   switch (calendarView) {
     case CalendarView.DAY:
-      renderSingleDay(filteredDateEvents, viewDate);
+      // React is now handling this view.
       break;
     case CalendarView.WEEK:
       renderSingleWeek(events, viewDate);
@@ -59,7 +59,7 @@ export function renderCalendarView(
       renderSingleMonth(events, viewDate);
       break;
     default:
-      renderSingleDay(filteredDateEvents, viewDate);
+      break;
   }
 }
 
