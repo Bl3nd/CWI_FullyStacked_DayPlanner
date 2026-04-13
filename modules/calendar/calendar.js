@@ -1,6 +1,4 @@
 "use strict";
-
-import { renderSingleDay } from "./dailyCalendar";
 import { renderSingleWeek } from "./weeklyCalendar";
 import { renderSingleMonth } from "./monthlyCalendar";
 import appState from "../appState";

@@ -31,12 +31,12 @@ function initializeCalendarUI(): void {
 function mountCalendarWrapper(): void {
   const calendarViewAreaElement = document.getElementById("calendarViewArea");
 
-  if (!calendarViewAreaElement) {
-    console.error("calendarViewArea not found");
-    return;
-  }
+  // if (!calendarViewAreaElement) {
+  //   console.error("calendarViewArea not found");
+  //   return;
+  // }
 
-  const root = createRoot(calendarViewAreaElement);
+  const root = createRoot(calendarViewAreaElement!);
   root.render(<CalendarWrapper />);
 }
 
