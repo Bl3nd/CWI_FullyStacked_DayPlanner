@@ -16,9 +16,11 @@ export default function EventForm({
   onSubmit,
 }: eventFormProps) {
   // Form variables
-  const title: string = UID? "Edit Event" :"Add Event";
+  const title: string = UID ? "Edit Event" : "Add Event";
   // Pull all events from appState
-  const targetEvent: CalendarEvent | undefined = UID? appState.getEventByUID(UID) : undefined;
+  const targetEvent: CalendarEvent | undefined = UID
+    ? appState.getEventByUID(UID)
+    : undefined;
   // If UID is null, return an empty event form submission
   return (
     <div
@@ -30,16 +32,28 @@ export default function EventForm({
         }
       }}
     >
-      <form id="eventForm" onSubmit={onSubmit}>
+      <form id="eventForm" className="bg-body" onSubmit={onSubmit}>
         <h2 id="eventFormTitle">{title}</h2>
         <label htmlFor="eventTitle">
           Event Name <span className="text-danger">*</span>
         </label>
-        <input type="text" id="eventTitle" name="title" defaultValue={targetEvent?.title} required />
+        <input
+          type="text"
+          id="eventTitle"
+          name="title"
+          defaultValue={targetEvent?.title}
+          required
+        />
         <label htmlFor="eventDate">
           Date <span className="text-danger">*</span>
         </label>
-        <input type="date" id="eventDate" name="date" defaultValue={targetEvent?.date ?? appState.dateView} required />
+        <input
+          type="date"
+          id="eventDate"
+          name="date"
+          defaultValue={targetEvent?.date ?? appState.dateView}
+          required
+        />
         <div id="timeContainer">
           <label htmlFor="eventStartTime">
             Start Time <span className="text-danger">*</span>
@@ -53,7 +67,7 @@ export default function EventForm({
             required
           />
           <label htmlFor="eventEndTime">
-            End Time <span>*</span>
+            End Time <span className="text-danger">*</span>
           </label>
           <input
             type="time"
@@ -102,9 +116,11 @@ export default function EventForm({
           <button type="button" onClick={onCancel} id="cancelEventButton">
             Cancel
           </button>
-          {UID? <button type="button" onClick={onDelete} id="deleteEventButton">
-            Delete
-          </button> : undefined}
+          {UID ? (
+            <button type="button" onClick={onDelete} id="deleteEventButton">
+              Delete
+            </button>
+          ) : undefined}
         </div>
       </form>
     </div>

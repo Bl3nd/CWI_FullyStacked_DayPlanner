@@ -190,7 +190,7 @@ function createEventButton(eventsLayer, events, event, index, assignedLanes) {
 }
 
 // Assigns a lane to each event based on the duration of the event and the other events that are happening at the same time.
-function assignLanesForEvents(events) {
+export function assignLanesForEvents(events) {
   const assignedLanes = new Map();
   // Inline functions to calculate the duration and tranlsate time strings to minutes
   const durationMinutes = (event) =>
@@ -233,7 +233,7 @@ function assignLanesForEvents(events) {
 }
 
 // Calculates the total number of concurrent events overlapping the given event's time range.
-function calculateTotalConcurrentEvents(event, events) {
+export function calculateTotalConcurrentEvents(event, events) {
   const eventStart = Calendar.timeStringToMinutes(event.timeStart);
   const eventEnd = Calendar.timeStringToMinutes(event.timeEnd);
   // Filter the events to only include events that overlap with the given event's time range
@@ -277,7 +277,7 @@ function calculateTotalConcurrentEvents(event, events) {
 }
 
 // Creates the full 24 hour slots
-function createAllSlotsForDay(slotDuration) {
+export default function createAllSlotsForDay(slotDuration) {
   const slots = [];
   for (let i = 0; i < Calendar.MINUTES_PER_DAY; i += slotDuration) {
     slots.push(i);
@@ -298,7 +298,7 @@ function getSlotDuration() {
 
 // Creates a popup for the event clicked that shows more info about it.
 // Displays popup at position clicked
-function showClickedEventPopup(event) {
+export function showClickedEventPopup(event) {
   const clickedEventPopup = document.getElementById("clickedEventPopup");
 
   document.getElementById("clickedEventPopupTitle").textContent = event.title;

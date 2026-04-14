@@ -8,7 +8,7 @@
 }
 
 #eventPopupContainer {
-  background-color: rgba(0, 0, 0, .4);
+  background-color: rgba(0, 0, 0, 0.4);
   place-items: center;
   position: fixed;
   height: 100%;
@@ -20,7 +20,6 @@
 }
 
 #eventForm {
-  background-color: white;
   border: 1px solid black;
   border-radius: 0.5rem;
   display: flex;
@@ -34,6 +33,27 @@
 #eventForm h2 {
   margin: 0;
   text-align: center;
+}
+
+#eventForm :is(input, textarea, button) {
+  border: 1px solid black;
+  border-radius: 0.25rem;
+}
+
+html[data-bs-theme="light"] #eventForm :is(input, textarea, button) {
+  background-color: rgb(236, 236, 236);
+}
+
+#eventForm #eventColor {
+  padding: 0;
+}
+
+#eventForm input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+#eventForm input[type="color"]::-webkit-color-swatch {
+  border: none;
 }
 
 #eventForm > * {
