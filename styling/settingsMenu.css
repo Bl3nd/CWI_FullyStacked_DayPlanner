@@ -17,8 +17,6 @@
   @media (min-width: 1024px) {
     right: 1.25rem;
   }
-
-  border: none;
 }
 
 body.dark-mode .settingsMenuButton {
@@ -85,8 +83,6 @@ body.dark-mode .settingsMenuItemsContainer {
   padding: 0.25rem;
   width: 16rem;
   height: 3rem;
-
-  border: none;
 
   /* Keeps borders from overlapping and doubling in thickness */
   margin-bottom: -1px;

@@ -4,7 +4,6 @@
   display: hidden;
   flex-direction: row;
   min-height: 100%;
-  border: none;
 }
 
 /* Left column: time labels (Google-style narrow strip) */
@@ -12,9 +11,7 @@
   flex-shrink: 0;
   padding-left: 0.5rem;
   padding-top: 0.125rem;
-  border: none;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 0%;
   background-color: rgba(0, 0, 0, 0.02);
 }
 
@@ -23,7 +20,6 @@
   align-items: flex-start;
   justify-content: flex-end;
   padding-right: 0.5rem;
-  border: none;
 }
 
 .calendarTimeSlotRow[data-active="true"] .calendarTimeLabel {
@@ -43,8 +39,6 @@
   position: relative;
   min-width: 0;
   background-color: #fff;
-  border: none;
-  border-radius: 0%;
 }
 
 .calendarHourGridLines {
@@ -55,14 +49,11 @@
   display: flex;
   flex-direction: column;
   pointer-events: none;
-  border: none;
 }
 
 .calendarHourGridLine {
   flex-shrink: 0;
-  border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 0%;
 
   &:last-child {
     border-bottom: none;
@@ -78,7 +69,6 @@
   background-color: #ea4335;
   z-index: 2;
   pointer-events: none;
-  border: none;
 }
 
 .calendarNowLine::before {
@@ -100,7 +90,6 @@
   right: 0.125rem;
   padding: 0 0.5rem;
   pointer-events: none;
-  border: none;
   background-color: rgba(0, 0, 0, 0.02);
 }
 
@@ -188,8 +177,4 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 0.75rem;
-}
-
-.durationSelectInput {
-  width: 100%;
 }
