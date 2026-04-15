@@ -1,3 +1,7 @@
+.allDayDisplay{
+  background-color: rgba(var(--bs-primary-rgb), 0.15);
+}
+
 /* Two-column layout: time labels | day grid */
 .calendarDayContent {
   /* Counterintuitive to use display: hidden, but we need to hide the content until the calendar view is set to day */

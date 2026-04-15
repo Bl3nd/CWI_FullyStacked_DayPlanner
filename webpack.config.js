@@ -18,7 +18,7 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, "dist"),
       clean: true,
     },
-    devtool: "inline-source-map",
+    devtool: isProduction ? false : "source-map",
     devServer: {
       static: [
         { directory: path.resolve(__dirname, "dist") },

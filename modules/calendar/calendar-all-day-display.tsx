@@ -39,12 +39,12 @@ function CalendarAllDayDisplay() {
   const visibleItems = allDayEvents.slice(0, 2);
 
   return (
-    <div className="allDayDisplay w-100 px-1 py-1">
+    <div className="w-100 px-1 py-1">
       <div className="d-flex flex-column gap-2 w-100">
         {visibleItems.map((event) => (
           <div
             key={event.UID}
-            className="px-2 py-1 border rounded bg-body-tertiary text-center fw-bold"
+            className="allDayDisplay px-2 py-1 border rounded text-center fw-bold"
           >
             {event.title}
           </div>
