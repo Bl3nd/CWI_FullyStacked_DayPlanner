@@ -32,11 +32,23 @@
 
     <!--Event Popup-->
     <div id="clickedEventPopup" class="clickedEventPopup">
-      <h2 id="clickedEventPopupTitle"></h2>
-      <p id="clickedEventPopupTime"></p>
-      <p id="clickedEventPopupAddress"></p>
-      <p id="clickedEventPopupDescription"></p>
-      <button type="button" id="editEventButton">Edit</button>
+      <h2 id="clickedEventPopupTitle" class="fs-2"></h2>
+      <p id="clickedEventPopupTime" class="mb-0 fs-5 fw-bold"></p>
+      <p id="clickedEventPopupAddress" class="mb-0">
+        <span class="fw-semibold">Address:</span>
+        <span id="clickedEventPopupAddressText"></span>
+      </p>
+      <p id="clickedEventPopupDescription">
+        <span class="fw-semibold">Description:</span>
+        <span id="clickedEventPopupDescriptionText"></span>
+      </p>
+      <button
+        type="button"
+        id="editEventButton"
+        class="btn btn-sm w-100 btn-primary"
+      >
+        Edit
+      </button>
     </div>
 
     <!-- Container for navigation and new event buttons -->

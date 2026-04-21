@@ -1,7 +1,7 @@
 "use strict";
 
 import * as Calendar from "./calendar";
-import {showEventManager} from "../eventManager";
+import { showEventManager } from "../eventManager";
 
 // Render the single day view of the calendar
 export function renderSingleDay(events, viewDate) {
@@ -183,8 +183,8 @@ function createEventButton(eventsLayer, events, event, index, assignedLanes) {
   }
   // Attaches event listener to event
   eventButton.addEventListener("click", (clickEvent) => {
-      clickEvent.stopPropagation(); // Stops popup from instantly closing
-      showClickedEventPopup(event, clickEvent);
+    clickEvent.stopPropagation(); // Stops popup from instantly closing
+    showClickedEventPopup(event, clickEvent);
   });
   eventsLayer.appendChild(eventButton);
 }
@@ -295,16 +295,18 @@ function getSlotDuration() {
   return Number.isNaN(parsedValue) ? 60 : parsedValue;
 }
 
-
 // Creates a popup for the event clicked that shows more info about it.
 // Displays popup at position clicked
 export function showClickedEventPopup(event) {
   const clickedEventPopup = document.getElementById("clickedEventPopup");
 
   document.getElementById("clickedEventPopupTitle").textContent = event.title;
-  document.getElementById("clickedEventPopupTime").textContent = `${Calendar.formatTime(event.timeStart)} - ${Calendar.formatTime(event.timeEnd)}`;
-  document.getElementById("clickedEventPopupDescription").textContent = "Description: " + event.description;
-  document.getElementById("clickedEventPopupAddress").textContent = "Address: " + event.address;
+  document.getElementById("clickedEventPopupTime").textContent =
+    `${Calendar.formatTime(event.timeStart)} - ${Calendar.formatTime(event.timeEnd)}`;
+  document.getElementById("clickedEventPopupDescriptionText").textContent =
+    event.description;
+  document.getElementById("clickedEventPopupAddressText").textContent =
+    event.address;
   document.getElementById("editEventButton").onclick = () => {
     editClickedEventPopup(event);
   };
