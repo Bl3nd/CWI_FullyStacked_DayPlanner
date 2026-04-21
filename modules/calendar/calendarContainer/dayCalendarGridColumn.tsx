@@ -9,7 +9,6 @@ type Props = {
 	slots: number[];
 	slotHeight: number;
 	currentMinutesFromMidnight: number | null;
-	viewDate: Date;
 };
 
 export default function DayCalendarGridColumn({
@@ -17,13 +16,12 @@ export default function DayCalendarGridColumn({
 	slots,
 	slotHeight,
 	currentMinutesFromMidnight,
-	viewDate,
 }: Props) {
 	return (
 		<div
 			id="calendarDayGridColumn"
 			className="calendarDayGridColumn"
-			onPointerDown={(event) => handleLongPress(event, viewDate)}
+			onPointerDown={(event) => handleLongPress(event)}
 			onPointerUp={endLongPress}
 			onPointerCancel={endLongPress}
 			onPointerLeave={endLongPress}

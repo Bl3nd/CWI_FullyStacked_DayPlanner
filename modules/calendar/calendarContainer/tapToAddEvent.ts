@@ -1,7 +1,7 @@
-// Lets you do a long press anywhere on the day calandar (week/month later?)
+// Lets you do a long press anywhere on the day calandar
 // and it automatically fills out date and time
 
-let selectedDateTime: { date: string; startTime: string; endTime: string } | null = null;
+let selectedDateTime: { startTime: string; endTime: string } | null = null;
 
 let pressTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -39,7 +39,6 @@ function isValidInput(event: React.PointerEvent<HTMLDivElement>): boolean {
 function calcDateTime(
   dayGridColumn: HTMLDivElement,
   yPosition: number,
-  viewDate: Date
 ) {
   const elementRectangle = dayGridColumn.getBoundingClientRect();
   const y = yPosition - elementRectangle.top;
@@ -47,15 +46,26 @@ function calcDateTime(
   const minutes = Math.floor((y / elementRectangle.height) * 1440); // 1440 minutes in a day
 
   // Changes starting interval when clicking on calandar, value in minutes,
+  // Example at 60 starting times are 1:00am, 2:00am, 3:00am ect.
+  // Example at 30 starting times are 1:00am, 1:30am, 2:00am ect.
   // both numbers in formula should match if changed
   const startMinutes = Math.floor(minutes / 60) * 60;
 
   // "% 1440" makes times close to midnight loop back to start Ex: (11pm to 12am)
   // Calandar currently does not support events going into multiple days Ex:(11pm to 12am)
-  // Add "% 1440" to the end of the formula if that gets added later
-  const endMinutes = (startMinutes + DEFAULT_EVENT_DURATION); 
+  // Replace current formula and if/else statement and replace with comment below if support gets added
+  // const endMinutes = (startMinutes + DEFAULT_EVENT_DURATION) % 1440;
+  const initialEndMinutes = startMinutes + DEFAULT_EVENT_DURATION;
+  let endMinutes: number;
+
+  // Caps time at 11:45pm
+  if (initialEndMinutes >= 1440) {
+    endMinutes = 1425;    
+  } else {
+    endMinutes = initialEndMinutes;
+  }
+
   selectedDateTime = {
-    date: viewDate.toLocaleDateString("en-CA"),
     startTime: formatTime(startMinutes),
     endTime: formatTime(endMinutes),
   };
@@ -66,7 +76,6 @@ function calcDateTime(
 // Long Press
 export function handleLongPress(
   event: React.PointerEvent<HTMLDivElement>,
-  viewDate: Date
 ): void {
   if (!isValidInput(event)) return;
 
@@ -76,7 +85,7 @@ export function handleLongPress(
   const clientY = event.clientY;
 
   pressTimer = setTimeout(() => {
-    calcDateTime(dayGridColumn, clientY, viewDate);
+    calcDateTime(dayGridColumn, clientY);
   }, LONG_PRESS_DURATION);
 }
 
@@ -88,7 +97,7 @@ export function endLongPress(): void {
   }
 }
 
-export function getTimeSlot(): { date: string; startTime: string; endTime: string } | null {
+export function getTimeSlot(): { startTime: string; endTime: string } | null {
   return selectedDateTime;
 }
 

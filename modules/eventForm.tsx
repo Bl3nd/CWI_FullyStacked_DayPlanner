@@ -52,7 +52,7 @@ export default function EventForm({
           type="date"
           id="eventDate"
           name="date"
-          defaultValue={targetEvent?.date ?? getTimeSlot()?.date ?? appState.dateView}
+          defaultValue={targetEvent?.date ?? appState.dateView}
           required
         />
         <div id="timeContainer">
