@@ -54,18 +54,10 @@ body {
   margin-top: 5px;
   top: 50%;
   left: 50%;
+  border-radius: 0.5rem;
   transform: translate(-50%, -50%);
-  font-size: 0.75rem;
-  background-color: white;
+  background-color: var(--bs-body-bg);
   padding: 1rem;
-  border: 1px solid black;
+  border: 1px solid var(--bs-border-color);
   z-index: 20;
-}
-
-.clickedEventPopup > * {
-  margin-bottom: 0.25rem;
-}
-
-#editEventButton {
-  width: 100%;
 }
