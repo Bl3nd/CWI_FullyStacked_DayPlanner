@@ -1,7 +1,7 @@
 // Lets you do a long press anywhere on the day calandar
-// and it automatically fills out date and time
+// and it automatically fills out time
 
-let selectedDateTime: { startTime: string; endTime: string } | null = null;
+let selectedTime: { startTime: string; endTime: string } | null = null;
 
 let pressTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -36,7 +36,7 @@ function isValidInput(event: React.PointerEvent<HTMLDivElement>): boolean {
   }
 }
 
-function calcDateTime(
+function calcTime(
   dayGridColumn: HTMLDivElement,
   yPosition: number,
 ) {
@@ -65,7 +65,7 @@ function calcDateTime(
     endMinutes = initialEndMinutes;
   }
 
-  selectedDateTime = {
+  selectedTime = {
     startTime: formatTime(startMinutes),
     endTime: formatTime(endMinutes),
   };
@@ -85,7 +85,7 @@ export function handleLongPress(
   const clientY = event.clientY;
 
   pressTimer = setTimeout(() => {
-    calcDateTime(dayGridColumn, clientY);
+    calcTime(dayGridColumn, clientY);
   }, LONG_PRESS_DURATION);
 }
 
@@ -98,10 +98,10 @@ export function endLongPress(): void {
 }
 
 export function getTimeSlot(): { startTime: string; endTime: string } | null {
-  return selectedDateTime;
+  return selectedTime;
 }
 
 // Prevents the add event button from autofilling with previous data
 export function clearTimeSlot(): void {
-  selectedDateTime = null;
+  selectedTime = null;
 }
