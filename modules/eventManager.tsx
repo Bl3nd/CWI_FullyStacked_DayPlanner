@@ -74,13 +74,19 @@ function showEventManager(UID: string | null = null): void {
   }
 
   function deleteEvent() {
-    appState.removeEvent(UID!);
-    renderCalendarView(
-      appState.allEventsByDate,
-      appState.dateViewObject,
-      appState.calendarView,
-    );
-    close();
+    if (
+      confirm(
+        "Are you sure you want to delete this event? This action cannot be undone.",
+      )
+    ) {
+      appState.removeEvent(UID!);
+      renderCalendarView(
+        appState.allEventsByDate,
+        appState.dateViewObject,
+        appState.calendarView,
+      );
+      close();
+    }
   }
 }
 

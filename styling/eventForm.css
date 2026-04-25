@@ -16,6 +16,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: auto;
+  flex-shrink: 1;
   pointer-events: auto;
 }
 
@@ -29,39 +31,8 @@
   width: 70%;
   max-width: 600px;
 }
-
-#eventForm h2 {
-  margin: 0;
-  text-align: center;
-}
-
-#eventForm :is(input, textarea, button) {
-  border: 1px solid black;
-  border-radius: 0.25rem;
-}
-
-html[data-bs-theme="light"] #eventForm :is(input, textarea, button) {
-  background-color: rgb(236, 236, 236);
-}
-
-#eventForm #eventColor {
-  padding: 0;
-}
-
-#eventForm input[type="color"]::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-#eventForm input[type="color"]::-webkit-color-swatch {
-  border: none;
-}
-
 #eventForm > * {
   margin-bottom: 5px;
-}
-
-#eventForm textarea {
-  resize: vertical;
 }
 
 #eventForm > div {
@@ -70,6 +41,57 @@ html[data-bs-theme="light"] #eventForm :is(input, textarea, button) {
   gap: 0.5rem;
   justify-content: center;
   width: 100%;
+}
+
+#eventForm .inputPair {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+#eventForm :is(input, textarea, button) {
+  border: 1px solid black;
+  border-radius: 0.25rem;
+}
+
+#eventForm h2 {
+  text-align: center;
+}
+
+#eventTitle,
+#eventDate,
+#eventStartTime,
+#eventEndTime {
+  flex-grow: 1;
+}
+
+#eventForm #eventColor {
+  padding: 0;
+  width: 27px;
+}
+#eventForm input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+#eventForm input[type="color"]::-webkit-color-swatch {
+  border: none;
+}
+
+#eventDate,
+#eventStartTime,
+#eventEndTime {
+  /* width: 110px; */
+  height: fit-content;
+}
+
+#eventForm textarea {
+  resize: vertical;
+}
+
+#cancelEventButton {
+  background-color: #0d6efd;
+  color: white;
 }
 
 #eventFormButtonsContainer {
@@ -87,5 +109,16 @@ html[data-bs-theme="light"] #eventForm :is(input, textarea, button) {
 
   #eventForm #timeContainer {
     justify-content: flex-start;
+  }
+}
+
+@media (max-width: 767px) {
+  #eventForm .inputPair {
+    justify-content: space-between;
+  }
+
+  #eventForm :is(#eventDate, #eventStartTime, #eventEndTime) {
+    width: 135px;
+    flex-grow: 0;
   }
 }
