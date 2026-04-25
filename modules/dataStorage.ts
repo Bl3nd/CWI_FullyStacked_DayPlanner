@@ -57,13 +57,7 @@ const StorageManager = {
    * @param UID indentifier string from the CalendarEvent object to be deleted
    */
   deleteEvent(UID: string): void {
-    if (
-      confirm(
-        "Are you sure you want to delete this event? This action cannot be undone.",
-      )
-    ) {
-      localStorage.removeItem(savedEventPrefix + UID);
-    }
+    localStorage.removeItem(savedEventPrefix + UID);
   },
 
   /**
