@@ -1,6 +1,7 @@
 import React from "react";
 import appState from "./appState";
 import CalendarEvent from "./classCalendarEvent";
+import { getTimeSlot } from "./calendar/calendarContainer/tapToAddEvent";
 
 type eventFormProps = {
   UID: string | null;
@@ -62,7 +63,7 @@ export default function EventForm({
             type="time"
             id="eventStartTime"
             name="timeStart"
-            defaultValue={targetEvent?.timeStart}
+            defaultValue={targetEvent?.timeStart ?? getTimeSlot()?.startTime}
             step={900}
             required
           />
@@ -73,7 +74,7 @@ export default function EventForm({
             type="time"
             id="eventEndTime"
             name="timeEnd"
-            defaultValue={targetEvent?.timeEnd}
+            defaultValue={targetEvent?.timeEnd ?? getTimeSlot()?.endTime}
             step={900}
             required
           />

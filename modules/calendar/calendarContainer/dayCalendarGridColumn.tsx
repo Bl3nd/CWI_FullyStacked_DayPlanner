@@ -2,6 +2,7 @@ import DayCalendarHourGridLines from './dayCalendarHourGridLines';
 import DayCalendarCurrentTimeLine from './dayCalendarCurrentTimeLine';
 import DayCalendarEventsLayer from './dayCalendarEventsLayer';
 import CalendarEvent from '../../classCalendarEvent';
+import { handleLongPress, endLongPress } from './tapToAddEvent';
 
 type Props = {
 	events: CalendarEvent[];
@@ -17,7 +18,14 @@ export default function DayCalendarGridColumn({
 	currentMinutesFromMidnight,
 }: Props) {
 	return (
-		<div id="calendarDayGridColumn" className="calendarDayGridColumn">
+		<div
+			id="calendarDayGridColumn"
+			className="calendarDayGridColumn"
+			onPointerDown={(event) => handleLongPress(event)}
+			onPointerUp={endLongPress}
+			onPointerCancel={endLongPress}
+			onPointerLeave={endLongPress}
+		>
 			<DayCalendarHourGridLines slots={slots} slotHeight={slotHeight} />
 			<DayCalendarCurrentTimeLine
 				currentMinutesFromMidnight={currentMinutesFromMidnight}

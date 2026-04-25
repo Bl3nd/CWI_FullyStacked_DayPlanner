@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import React from "react";
 import EventForm from "./eventForm";
 import appState from "./appState";
+import { clearTimeSlot } from "./calendar/calendarContainer/tapToAddEvent";
 
 // TODO: Add non null verification/exception handling
 
@@ -63,6 +64,7 @@ function showEventManager(UID: string | null = null): void {
   );
 
   function close() {
+    clearTimeSlot();
     eventFormRoot!.unmount();
   }
 
