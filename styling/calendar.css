@@ -12,24 +12,6 @@
   border-radius: var(--bs-border-radius);
 }
 
-#calendarViewArea .calendarDayContent,
-#calendarViewArea .calendarWeekContent,
-#calendarViewArea .calendarMonthContent {
-  display: none;
-}
-
-#calendarViewArea[data-calendar-view="day"] .calendarDayContent {
-  display: flex;
-}
-
-#calendarViewArea[data-calendar-view="week"] .calendarWeekContent {
-  display: flex;
-}
-
-#calendarViewArea[data-calendar-view="month"] .calendarMonthContent {
-  display: flex;
-}
-
 @media (min-width: 768px) {
   #calendarViewArea {
     grid-column: span 6;

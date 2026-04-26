@@ -43,16 +43,20 @@ function formatSingleDay(date: Date) {
   });
 }
 
+/** First day shown in week view: Sunday by default, or Monday when that setting is on. */
+export function getWeekRangeStartDate(date: Date, firstDayOfWeek: string) {
+  const firstDayIndex = firstDayOfWeek === "Monday" ? 1 : 0;
+  const dayOfWeek = date.getDay();
+  const daysFromStart = (dayOfWeek - firstDayIndex + 7) % 7;
+  const startDate = new Date(date.getTime());
+  startDate.setDate(date.getDate() - daysFromStart);
+  return startDate;
+}
+
 // "Apr 5 - Apr 11, 2026" if first day of week is set to Sunday
 // "Apr 6 - Apr 12, 2026" if first day of week is set to Monday
 function formatWeekRange(date: Date, firstDayOfWeek: string) {
-  const firstDayIndex = firstDayOfWeek === "Monday" ? 1 : 0;
-  const dayOfWeek = date.getDay();
-
-  const daysFromStart = (dayOfWeek - firstDayIndex + 7) % 7;
-
-  const startDate = new Date(date);
-  startDate.setDate(date.getDate() - daysFromStart);
+  const startDate = getWeekRangeStartDate(date, firstDayOfWeek);
 
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);

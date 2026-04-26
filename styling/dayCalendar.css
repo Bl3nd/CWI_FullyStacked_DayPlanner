@@ -4,8 +4,7 @@
 
 /* Two-column layout: time labels | day grid */
 .calendarDayContent {
-  /* Counterintuitive to use display: hidden, but we need to hide the content until the calendar view is set to day */
-  display: hidden;
+  display: flex;
   flex-direction: row;
   min-height: 100%;
 }
@@ -178,4 +177,17 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 0.75rem;
+}
+
+@media (max-width: 575.98px) {
+  .calendarEventContainer .calendarEventTitle {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* single-line truncation */
+  }
+  .calendarEventContainer .calendarEventDescription {
+    -webkit-line-clamp: 1; /* optional: tighter on mobile */
+    line-clamp: 1;
+  }
 }
