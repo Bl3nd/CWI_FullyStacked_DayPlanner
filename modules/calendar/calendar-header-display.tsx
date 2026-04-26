@@ -48,7 +48,7 @@ export function getWeekRangeStartDate(date: Date, firstDayOfWeek: string) {
   const firstDayIndex = firstDayOfWeek === "Monday" ? 1 : 0;
   const dayOfWeek = date.getDay();
   const daysFromStart = (dayOfWeek - firstDayIndex + 7) % 7;
-  const startDate = new Date(date.getTime());
+  const startDate = new Date(date);
   startDate.setDate(date.getDate() - daysFromStart);
   return startDate;
 }

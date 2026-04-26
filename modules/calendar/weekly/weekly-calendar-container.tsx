@@ -1,5 +1,5 @@
 import { useAppSettings } from "../../appSettings";
-import appState, { useAppState } from "../../appState";
+import appState from "../../appState";
 import CalendarEventButton from "../calendarContainer/calendarEventButton";
 import {
   assignLanesForEvents,
@@ -76,8 +76,14 @@ const WeeklyCalendarDayColumnHeader = ({
 
 // Column for each day of the week. Displays the events for the day in the same lane layout as the day calendar but with a max of 2 concurrent events.
 const WeeklyCalendarDayColumn = ({ daysDate }: { daysDate: string }) => {
-  const { allEventsByDate } = useAppState();
-  const dayEvents = allEventsByDate.get(daysDate) ?? [];
+  const { displayHolidays } = useAppSettings();
+  const dayEvents = appState
+    .getEventsByDate(daysDate)
+    .filter((event) =>
+      displayHolidays
+        ? !event.UID.startsWith("allDay-") || !event.UID.startsWith("holiday-")
+        : !event.UID.startsWith("allDay-"),
+    );
   const assignedLanes = assignLanesForEvents(dayEvents);
 
   return (
