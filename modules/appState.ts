@@ -272,6 +272,18 @@ class AppState {
     this.notifyListeners();
   }
 
+  switchToDay(date: string) {
+    this._calendarView = CalendarViews.Day;
+    StorageManager.saveCalendarView(CalendarViews.Day);
+    this._dateView = date;
+    const year = this.dateViewObject.getFullYear();
+    if (!this.areHolidaysLoadedForYear(year)) {
+      this.loadHolidayEventsForYear(year); // this calls notifyListeners internally
+    } else {
+      this.notifyListeners(); // single notification with both changes
+    }
+  }
+
   /**
    * Allows components to subscribe to changes in the app state.
    * Whenever the app state changes, all subscribed listener functions will be called

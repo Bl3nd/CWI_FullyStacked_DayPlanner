@@ -21,35 +21,6 @@ export const MINUTES_PER_DAY = 24 * 60;
 export const PIXELS_PER_MINUTE = 1; // 1 pixel per minute
 export const DAY_TOTAL_HEIGHT = MINUTES_PER_DAY * PIXELS_PER_MINUTE; // Give the day 24 hours of height
 
-// ----------------------Main Functions----------------------
-// Render the calendar view based on the calendar view type
-export function renderCalendarView(
-  events,
-  viewDate = new Date(),
-  calendarView = CalendarView.DAY,
-) {
-  const calendarViewArea = document.getElementById("calendarViewArea");
-  if (calendarViewArea)
-    calendarViewArea.setAttribute("data-calendar-view", calendarView); // Sets the 'data-calendar-view' attribute so we can show/hide the correct content.
-
-  const dateString = viewDate.toLocaleDateString("en-CA");
-  const filteredDateEvents = appState.getEventsByDate(dateString);
-
-  switch (calendarView) {
-    case CalendarView.DAY:
-      // React is now handling this view.
-      break;
-    case CalendarView.WEEK:
-      renderSingleWeek(events, viewDate);
-      break;
-    case CalendarView.MONTH:
-      renderSingleMonth(events, viewDate);
-      break;
-    default:
-      break;
-  }
-}
-
 // Formats the time slot time (e.g. 10:00 AM). Not using the event times!
 export function formatSlotTime(minutes) {
   const hours = Math.floor(minutes / 60);

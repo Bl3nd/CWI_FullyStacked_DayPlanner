@@ -3,8 +3,6 @@ import CalendarDisplayButtonsGroup from "./navigation/calendar-display-buttons-g
 import CalendarNavButtonsGroup from "./navigation/calendar-nav-buttons-group";
 import CalendarWrapper from "./calendarContainer/calendarWrapper";
 import { CalendarHeaderDisplay } from "./calendar-header-display";
-import appState from "../appState";
-import { CalendarViews } from "../enumCalendarViews";
 import { CalendarAllDayDisplay } from "./calendar-all-day-display";
 
 /**
@@ -47,30 +45,9 @@ function renderCalendarViewButtons(): void {
     // If the root element exists, create a root for the calendar view buttons.
     // Create a root for the calendar view buttons.
     const displayButtonsRoot = createRoot(displayButtonsRootElement);
-    // Render the calendar view buttons.
-    const renderDisplayButtons = () => {
-      displayButtonsRoot.render(
-        <CalendarDisplayButtonsGroup
-          activeView={appState.calendarView}
-          onSelectView={(view: CalendarViews) => {
-            appState.calendarView = view;
-            renderDisplayButtons(); // Re-render the calendar view buttons to reflect the new active view.
-          }}
-          //todayButton logic.  sets new date to today, set view to dayView, and rerenders the calendar and buttons.
-          onSelectToday={() => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            appState.dateView = today.toLocaleDateString("en-CA");
-            appState.calendarView = CalendarViews.Day;
-
-            renderDisplayButtons();
-          }}
-        />,
-      );
-    };
-
-    renderDisplayButtons(); // Automatically call the render function.
+    displayButtonsRoot.render(<CalendarDisplayButtonsGroup />);
+  } else {
+    throw new Error("calendarDisplayButtonsRoot is missing");
   }
 }
 

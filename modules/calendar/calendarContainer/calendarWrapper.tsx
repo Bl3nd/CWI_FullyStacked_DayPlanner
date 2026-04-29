@@ -9,7 +9,7 @@ import appState, { useAppState } from "../../appState";
  * React automatically re-renders this component with the latest values.
  */
 
-export default function calendarWrapper() {
+export default function CalendarWrapper() {
   /**
    * Subscribe to appState changes.
    * snapshot contains: { allEventsByDate, calendarView, dateView }
@@ -28,11 +28,19 @@ export default function calendarWrapper() {
       !event.UID.startsWith("holiday-") && !event.UID.startsWith("allDay-"),
   );
 
+  // Derive from snapshot, not from appState directly
+  const [year, month, day] = snapshot.dateView.split("-").map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  const viewDate = new Date(year, month - 1, day);
+
   return (
     <CalendarView
       view={snapshot.calendarView}
       events={regularEventsForViewDate}
-      viewDate={appState.dateViewObject}
+      viewDate={viewDate}
     />
   );
 }

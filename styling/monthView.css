@@ -1,0 +1,86 @@
+.monthGrid {
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto repeat(6, 1fr);
+
+  border: solid 0.125rem;
+}
+
+.dayNameCell {
+  text-align: center;
+  font-weight: bold;
+  background-color: rgba(var(--bs-primary-rgb), 0.5);
+  outline: solid 1px var(--bs-secondary);
+  border-radius: 0.25rem;
+}
+
+.dayCell {
+  outline: solid 1px var(--bs-secondary);
+  border-radius: 0.25rem;
+
+  padding: 0.1rem;
+
+  overflow: hidden;
+  min-height: 0;
+
+  background-color: var(--bs-body-bg);
+}
+
+.dayCellNumber {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+}
+
+.currentMonthDayCell .dayCellNumber {
+  font-weight: bold;
+}
+
+.todayCell {
+}
+
+.todayCell .dayCellNumber {
+  background-color: rgba(var(--bs-primary-rgb), 0.5);
+}
+
+.dayCellEvent {
+  font-size: 0.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+
+  border: solid 1px;
+  border-radius: 0.25rem;
+  padding-left: 2px;
+
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dayCellEvent p {
+  margin: 0;
+}
+
+.dayCellEventHoliday {
+  text-align: center;
+  border: none;
+  padding-bottom: 0.1rem;
+  font-size: 0.6rem;
+  font-weight: bold;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .dayCellNumber {
+    font-size: 1rem;
+  }
+
+  .dayCellEvent {
+    font-size: 0.85rem;
+  }
+}

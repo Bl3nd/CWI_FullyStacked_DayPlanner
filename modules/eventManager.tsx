@@ -1,7 +1,6 @@
 import generateUID from "./UIDGenerator";
 import StorageManager from "./dataStorage";
 import CalendarEvent from "./classCalendarEvent";
-import { renderCalendarView } from "./calendar/calendar";
 import { createRoot, type Root } from "react-dom/client";
 import React from "react";
 import EventForm from "./eventForm";
@@ -80,11 +79,6 @@ function showEventManager(UID: string | null = null): void {
       )
     ) {
       appState.removeEvent(UID!);
-      renderCalendarView(
-        appState.allEventsByDate,
-        appState.dateViewObject,
-        appState.calendarView,
-      );
       close();
     }
   }
@@ -115,11 +109,6 @@ function submitEvent(
   eventProps.UID = UID ?? generateUID();
   const newEvent = new CalendarEvent(eventProps);
   appState.addEvent(newEvent);
-  renderCalendarView(
-    appState.allEventsByDate,
-    appState.dateViewObject,
-    appState.calendarView,
-  );
 }
 
 /**

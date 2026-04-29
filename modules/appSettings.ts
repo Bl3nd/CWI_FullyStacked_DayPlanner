@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from "react";
-import { renderCalendarView } from "./calendar/calendar";
 import appState from "./appState";
 
 export const colorThemes = {
@@ -113,11 +112,6 @@ class AppSettings {
       this._displayHolidays = true;
     }
     this.notifyListeners();
-    renderCalendarView(
-      appState.allEventsByDate,
-      appState.dateViewObject,
-      appState.calendarView,
-    );
     this.saveSettings();
   };
 
