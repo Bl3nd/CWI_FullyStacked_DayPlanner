@@ -1,6 +1,6 @@
 import CalendarEvent from "../../classCalendarEvent";
 import { CalendarViews } from "../../enumCalendarViews";
-import WeeklyCalendarContainer from "../weekly/weekly-calendar-container";
+import WeekView from "./weekView";
 import DayView from "./dayView";
 import MonthView from "./monthView";
 
@@ -17,7 +17,7 @@ export default function CalendarView({ view, events, viewDate }: Props) {
   }
 
   if (view === CalendarViews.Week) {
-    return <WeeklyCalendarContainer />;
+    return <WeekView />;
   }
 
   if (view === CalendarViews.Month) {

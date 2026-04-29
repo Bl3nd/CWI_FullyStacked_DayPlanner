@@ -4,7 +4,6 @@ import "../styling/baseStyling.css";
 import "../styling/calendar.css";
 import "../styling/dayCalendar.css";
 import "../styling/eventForm.css";
-import "../styling/weeklyCalendar.css";
 
 import appSettings from "./appSettings";
 import createSettingsMenu from "./settingsMenu";
